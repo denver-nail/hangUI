@@ -335,3 +335,8 @@ npm run docs:dev
 **.github\workflows\test-and-deploy.yaml**
 
 ![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-22_17-17-14.png)
+
+**GitHub的actions的 初始状态**
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-22_17-22-36.png)
+
