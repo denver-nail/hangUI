@@ -340,8 +340,4 @@ npm run docs:dev
 
 ![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-22_17-22-36.png)
 
-测试actions是否配置成功
-
-.github\workflows\test-and-deploy.yml
-
-.github/workflows/test-and-deploy.yml
+**actions配置成功**
