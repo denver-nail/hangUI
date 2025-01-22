@@ -294,3 +294,30 @@ createApp(App).use(HangUI).mount("#app");
 @import './reset.css';
 ```
 
+## vitepress构建项目文档的初始化
+
+**在docs文件夹下执行命令**，进行vitepress初始化：
+
+```
+npx vitepress init
+```
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-22_16-41-06.png)
+
+修改命令：
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-22_16-53-08.png)
+
+**在根目录执行命令**：
+
+```
+npm run docs:dev
+```
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-22_16-59-14.png)
+
+**给vitepress添加base配置**
+
+**packages\docs\.vitepress\config.mts**
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-22_17-00-44.png)

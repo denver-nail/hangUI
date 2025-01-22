@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "pnpm --filter @hangui/play dev"
+    "dev": "pnpm --filter @hangui/play dev",
+    "docs:dev": "pnpm --filter @hangui/docs dev",
+    "docs:build": "pnpm --filter @hangui/docs bulid",
+    "test": "echo 'todo '"
   },
   "keywords": [],
   "author": "",
