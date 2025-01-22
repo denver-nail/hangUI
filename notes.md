@@ -178,3 +178,109 @@ export const withInstall = <T>(component: T) => {
 
 ```
 
+## 封装第一个按钮组件流程
+
+第一步：编写组件结构
+
+**packages\components\Button\Button.vue**
+
+```vue
+<template>
+    <button style="background-color: blue; color:red;">
+        this is a button
+    </button>
+</template>
+<script setup lang="ts">
+defineOptions({
+    name: 'HButton'
+})
+</script>
+
+```
+
+第二步：导出组件并添加install方法变成vue插件类型
+
+**packages\components\Button\index.ts**
+
+```ts
+//导入按钮组件
+import Button from "./Button.vue";
+//导入【给组件添加install方法的】函数
+import { withInstall } from "@hangui/utils";
+
+export const HButton = withInstall(Button);
+
+```
+
+第三步：将按钮组件通过components文件夹统一导出
+
+**packages\components\index.ts**
+
+```ts
+//统一导出组件的文件
+//导出Button文件夹中index文件中的所有方法
+export * from "./Button";
+
+```
+
+第四步：在core文件夹的components.ts文件中添加按钮组件
+
+**packages\core\components.ts**
+
+```ts
+//从component文件夹中导入所有组件
+import { HButton } from "@hangui/components";
+import type { Plugin } from "vue";
+//将所有组件作为vue插件暴露给外部
+export default [HButton] as Plugin[];
+
+```
+
+第五步：在core文件夹下统一暴露出所有组件
+
+**packages\core\index.ts**
+
+```ts
+import { makeInstaller } from "@hangui/utils";
+import components from "./components";
+//通过返回的 installer，可以将整个插件集合作为一个插件进行统一安装。
+const installer = makeInstaller(components);
+//core作为所有组件暴露的出口
+export * from "@hangui/components";
+export default installer;
+
+```
+
+第六步：
+
+在vue项目中使用：
+
+**1.将按钮组件以插件的方式添加到应用上：packages\play\src\main.ts**
+
+```ts
+import { createApp } from "vue";
+import "./style.css";
+import App from "./App.vue";
+//导入编写的UI库
+import HangUI from "hangui";
+//使用use将组件以插件的方式添加到应用上
+createApp(App).use(HangUI).mount("#app");
+```
+
+**2.在页面中使用按钮组件：packages\play\src\App.vue**
+
+```vue
+<script setup lang="ts">
+</script>
+
+<template>
+  <!-- 使用自己的按钮组件 -->
+  <HButton />
+</template>
+
+<style scoped>
+</style>
+
+```
+
+![](assert\Snipaste_2025-01-22_16-07-13.png)
