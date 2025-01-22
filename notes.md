@@ -178,7 +178,7 @@ export const withInstall = <T>(component: T) => {
 
 ```
 
-## 封装第一个按钮组件流程
+## 封装一个按钮组件流程
 
 第一步：编写组件结构
 
@@ -284,3 +284,13 @@ createApp(App).use(HangUI).mount("#app");
 ```
 
 ![](assert\Snipaste_2025-01-22_16-07-13.png)
+
+## 样式初始化
+
+**packages\theme\index.css**（入口文件）
+
+```css
+/* 导入重置浏览器默认样式 */
+@import './reset.css';
+```
+
