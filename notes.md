@@ -321,3 +321,17 @@ npm run docs:dev
 **packages\docs\.vitepress\config.mts**
 
 ![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-22_17-00-44.png)
+
+## 配置github相关
+
+生成一个新的token：选项全部勾选
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-22_17-16-37.png)
+
+将token配置到仓库中（需要与代码中的常量同名）
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-22_17-15-02.png)
+
+**.github\workflows\test-and-deploy.yaml**
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-22_17-17-14.png)
