@@ -341,3 +341,5 @@ npm run docs:dev
 ![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-22_17-22-36.png)
 
 **actions配置成功**
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-22_19-40-41.png)
