@@ -36,3 +36,6 @@ const _ref = ref<HTMLButtonElement>()
         <slot></slot>
     </component>
 </template>
+<style scoped>
+@import './style.css'
+</style>
