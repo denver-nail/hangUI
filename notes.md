@@ -454,3 +454,21 @@ describe("Button.vue", () => {
 ```
 
 ## 编写Button组件
+
+**编写进程（2）【编号对应git提交的描述内容与button组件相关的编号】**
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-23_22-08-29.png)
+
+## 配置storybook
+
+[Storybook for Vue & Vite | Storybook docs](https://storybook.js.org/docs/get-started/frameworks/vue3-vite?renderer=vue)
+
+**在play文件夹下**执行命令：
+
+```
+pnpm dlx storybook@latest init
+```
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-24_10-56-32.png)
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-24_12-04-19.png)
