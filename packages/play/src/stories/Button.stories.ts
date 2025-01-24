@@ -2,7 +2,7 @@ import type { Meta, StoryObj, ArgTypes } from "@storybook/vue3";
 import { fn, within, userEvent, expect } from "@storybook/test";
 import { HButton } from "hangui";
 
-type Story = StoryObj<typeof HButton> & { argTypes: ArgTypes };
+type Story = StoryObj<typeof HButton> & { argTypes?: ArgTypes };
 const meta: Meta<typeof HButton> = {
   title: "Example/Button",
   component: HButton,
@@ -49,10 +49,11 @@ const meta: Meta<typeof HButton> = {
   args: { onClick: fn() },
 };
 
-const container = (val: string) =>
-  `<div style="margin:5px">
-${val}
-</div>`;
+const container = (val: string) => `
+<div style="margin:5px">
+  ${val}
+</div>
+`;
 
 export const Default: Story & { args: { content: string } } = {
   argTypes: {
@@ -80,5 +81,28 @@ export const Default: Story & { args: { content: string } } = {
     expect(args.onClick).toHaveBeenCalled();
   },
 };
+export const Circle: Story = {
+  args: {
+    icon: "search",
+  },
+  render: (args) => ({
+    components: { HButton },
+    setup() {
+      return { args };
+    },
+    template: container(`
+      <h-button circle v-bind="args"/>
+    `),
+  }),
+  play: async ({ canvasElement, args, step }) => {
+    const canvas = within(canvasElement);
+    await step("click button", async () => {
+      await userEvent.click(canvas.getByRole("button"));
+    });
 
+    expect(args.onClick).toHaveBeenCalled();
+  },
+};
+
+Circle.parameters = {};
 export default meta;

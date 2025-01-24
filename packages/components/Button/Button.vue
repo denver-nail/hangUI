@@ -23,7 +23,7 @@ const emits = defineEmits<ButtonEmits>()
 //按钮的点击事件
 const handleBtnClick = (e: MouseEvent) => emits('click', e);
 //给按钮的点击事件添加节流(使用lodash库提供的节流函数)
-const handleBtnClickThrottle = throttle(handleBtnClick, props.throttleDuration)
+const handleBtnClickThrottle = throttle(handleBtnClick, props.throttleDuration, { trailing: false })
 //图标的样式（根据有没有默认slot）
 const iconStyle = computed(() => ({ marginRight: slots.default ? "6px" : '0px' }))
 //组件暴露的内容
