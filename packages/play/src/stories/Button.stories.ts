@@ -1,5 +1,5 @@
 import type { Meta, StoryObj, ArgTypes } from "@storybook/vue3";
-import { fn } from "@storybook/test";
+import { fn, within, userEvent, expect } from "@storybook/test";
 import { HButton } from "hangui";
 
 type Story = StoryObj<typeof HButton> & { argTypes: ArgTypes };
@@ -53,6 +53,7 @@ const container = (val: string) =>
   `<div style="margin:5px">
 ${val}
 </div>`;
+
 export const Default: Story & { args: { content: string } } = {
   argTypes: {
     content: {
@@ -70,6 +71,14 @@ export const Default: Story & { args: { content: string } } = {
     },
     template: container(`<h-button v-bind="args">{{args.content}}</h-button>`),
   }),
+  play: async ({ canvasElement, args, step }) => {
+    const canvas = within(canvasElement);
+    await step("click button", async () => {
+      await userEvent.tripleClick(canvas.getByRole("button"));
+    });
+
+    expect(args.onClick).toHaveBeenCalled();
+  },
 };
 
 export default meta;

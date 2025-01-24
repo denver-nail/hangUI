@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import type { ButtonProps, ButtonEmits, ButtonInstance } from './types';
 import { throttle } from 'lodash-es';
+import HIcon from '../Icon/Icon.vue';
 defineOptions({
     name: 'HButton'
 })
@@ -23,6 +24,8 @@ const emits = defineEmits<ButtonEmits>()
 const handleBtnClick = (e: MouseEvent) => emits('click', e);
 //给按钮的点击事件添加节流(使用lodash库提供的节流函数)
 const handleBtnClickThrottle = throttle(handleBtnClick, props.throttleDuration)
+//图标的样式（根据有没有默认slot）
+const iconStyle = computed(() => ({ marginRight: slots.default ? "6px" : '0px' }))
 //组件暴露的内容
 defineExpose<ButtonInstance>({ ref: _ref })
 </script>
@@ -40,10 +43,29 @@ defineExpose<ButtonInstance>({ ref: _ref })
             'is-disabled': disabled,
             'is-loading': loading,
         }"
+        :autofocus="autofocus"
         :disabled="disabled || loading ? true : void 0"
         :type="tag === 'button' ? nativeType : void 0"
         @click="(e: MouseEvent) => useThrottle ? handleBtnClickThrottle(e) : handleBtnClick(e)"
     >
+        <!-- 加载图标 -->
+        <template v-if="loading">
+            <slot name="loading">
+                <h-icon
+                    class="loading-icon"
+                    :icon="loadingIcon || 'spinner'"
+                    :style="iconStyle"
+                    size="1x"
+                    spin
+                />
+            </slot>
+        </template>
+        <h-icon
+            :icon="icon"
+            size="1x"
+            :style="iconStyle"
+            v-if="icon && !loading"
+        />
         <!-- 插槽允许父组件在按钮内部插入自定义内容，例如文字或图标。 -->
         <slot></slot>
     </component>

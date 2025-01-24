@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "pnpm --filter @hangui/play dev",
-    "storybook": "pnpm --filter @hangui/play storybook",
+    "story": "pnpm --filter @hangui/play storybook",
     "docs:dev": "pnpm --filter @hangui/docs dev",
     "docs:build": "pnpm --filter @hangui/docs build",
     "test": "pnpm --filter @hangui/components test"
@@ -35,6 +35,9 @@
     "hangui": "workspace:*",
     "@hangui/hooks": "workspace:*",
     "@hangui/utils": "workspace:*",
-    "@hangui/theme": "workspace:*"
+    "@hangui/theme": "workspace:*",
+    "@fortawesome/fontawesome-svg-core": "^6.5.2",
+    "@fortawesome/free-solid-svg-icons": "^6.5.2",
+    "@fortawesome/vue-fontawesome": "^3.0.8"
   }
 }

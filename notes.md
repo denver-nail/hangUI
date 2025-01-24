@@ -472,3 +472,119 @@ pnpm dlx storybook@latest init
 ![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-24_10-56-32.png)
 
 ![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-24_12-04-19.png)
+
+## 引入图标库
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-24_20-58-52.png)
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-24_21-00-15.png)
+
+## 编写Icon组件
+
+使用`$attrs`和` inheritAttrs: false`
+
+在 Vue 3 中，`v-bind="$attrs"` 的作用是将组件上接收到的所有未定义的属性绑定到一个特定的元素上。例如，在你的代码中：
+
+```vue
+<i
+    class="er-icon"
+    :class="[`er-icon-${type}`]"
+    :style="customStyles"
+    v-bind="$attrs"
+>
+    <font-awesome-icon v-bind="filterProps" />
+</i>
+```
+
+**功能解析**
+
+1. **$attrs 的来源：**
+
+   - `props` 是通过 `defineProps` 明确声明的属性。
+
+   - 除了声明的 `props`，组件接收到的其他未声明的属性都会被存储在 `$attrs` 中。
+
+   - ```
+     $attrs
+     ```
+
+      通常包括：
+
+     - 原生 HTML 属性（如 `id`、`aria-*` 等）。
+     - 自定义的非声明属性。
+
+2. **作用：**
+
+   - `v-bind="$attrs"` 会将 `$attrs` 中的所有属性绑定到 `<i>` 标签上。
+   - 这样可以灵活地将未处理的属性传递到组件的根元素，或者让用户动态添加属性。
+
+3. **配合 `inheritAttrs: false` 的意义：**
+
+   - 默认情况下，Vue 会将所有 `$attrs` 自动绑定到组件的根元素上。
+   - 当你使用 `inheritAttrs: false` 时，Vue 会阻止自动绑定，你可以手动选择要绑定的元素（如 `<i>` 标签）。
+   - 这提供了更精确的控制，避免多余属性污染组件的根节点。
+
+------
+
+**示例**
+
+假设你使用该组件如下：
+
+```vue
+<HIcon type="home" color="blue" id="icon-id" aria-label="Home Icon" />
+```
+
+**处理结果**：
+
+- `type` 和 `color` 是定义在 `props` 中的，会直接被组件处理。
+- `id` 和 `aria-label` 是未定义的属性，它们会被存储在 `$attrs` 中。
+- 通过 `v-bind="$attrs"`，这些属性会被绑定到 `<i>` 标签上。
+
+最终渲染的结果为：
+
+```html
+<i
+    class="er-icon er-icon-home"
+    style="color: blue;"
+    id="icon-id"
+    aria-label="Home Icon"
+>
+    <!-- FontAwesome 图标 -->
+</i>
+```
+
+------
+
+**$attrs 的典型用法**
+
+1. **传递事件监听器：** `$attrs` 也可以包含事件监听器，例如 `@mouseover` 或 `@focus` 等。
+
+   ```vue
+   <HIcon type="home" @click="handleClick" />
+   ```
+
+   如果你没有在组件中显式声明 `onClick`，`@click` 会自动存储在 `$attrs` 中，并通过 `v-bind="$attrs"` 绑定到 `<i>` 标签。
+
+2. **过滤多余属性：** 如果你不想让所有 `$attrs` 都传递到子元素上，可以手动筛选需要的属性：
+
+   ```typescript
+   const filteredAttrs = computed(() => {
+       const { id, 'aria-label': ariaLabel, ...rest } = $attrs;
+       return rest;
+   });
+   ```
+
+   然后：
+
+   ```vue
+   <i v-bind="filteredAttrs" />
+   ```
+
+------
+
+**注意事项**
+
+1. **避免冲突：** 确保 `$attrs` 中的属性不会与组件自身的 `props` 或 `v-bind` 属性冲突，否则可能会被覆盖。
+2. **可读性：** 虽然 `v-bind="$attrs"` 提供了很大灵活性，但在复杂组件中，手动筛选并明确绑定重要属性更能提高代码可读性。
+
+希望这个解释对你有所帮助！如果有其他问题，可以随时问我 😊。
