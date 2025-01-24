@@ -4,7 +4,8 @@ import { mount } from "@vue/test-utils";
 import Icon from "../Icon/Icon.vue";
 import type { ButtonType, ButtonSize } from "./types";
 import Button from "./Button.vue";
-
+import ButtonGroup from "./ButtonGroup.vue";
+// 这里是button组件的测试用例
 describe("Button.vue", () => {
   const onClick = vi.fn();
   test("basic button", async () => {
@@ -193,5 +194,66 @@ describe("Button.vue", () => {
     expect(iconElement.attributes("icon")).toBe("spinner");
     await wrapper.trigger("click");
     expect(wrapper.emitted("click")).toBeUndefined();
+  });
+});
+// 下面是buttonGroup组件的测试用例
+describe("ButtonGroup.vue", () => {
+  test("basic button group", async () => {
+    const wrapper = mount(() => (
+      <ButtonGroup>
+        <Button>button 1</Button>
+        <Button>button 2</Button>
+      </ButtonGroup>
+    ));
+
+    expect(wrapper.classes()).toContain("er-button-group");
+  });
+
+  test("button group size", () => {
+    const sizes = ["large", "default", "small"];
+    sizes.forEach((size) => {
+      const wrapper = mount(() => (
+        <ButtonGroup size={size as any}>
+          <Button>button 1</Button>
+          <Button>button 2</Button>
+        </ButtonGroup>
+      ));
+
+      const buttonWrapper = wrapper.findComponent(Button);
+      expect(buttonWrapper.classes()).toContain(`er-button--${size}`);
+    });
+  });
+
+  test("button group type", () => {
+    const types = ["primary", "success", "warning", "danger", "info"];
+    types.forEach((type) => {
+      const wrapper = mount(() => (
+        <ButtonGroup type={type as any}>
+          <Button>button 1</Button>
+          <Button>button 2</Button>
+        </ButtonGroup>
+      ));
+
+      const buttonWrapper = wrapper.findComponent(Button);
+      expect(buttonWrapper.classes()).toContain(`er-button--${type}`);
+    });
+  });
+
+  test("button group disabled", async () => {
+    const wrapper = mount(ButtonGroup, {
+      props: { disabled: true },
+      slots: {
+        default: ["<Button>Button 1</Button>", "<Button>Button 2</Button>"],
+      },
+    });
+
+    // 等待 Vue 渲染完成
+    await wrapper.vm.$nextTick();
+
+    const buttons = wrapper.findAllComponents(Button);
+    buttons.forEach((button) => {
+      // 验证 `is-disabled` 是否被添加到按钮上
+      expect(button.classes()).toContain("is-disabled");
+    });
   });
 });

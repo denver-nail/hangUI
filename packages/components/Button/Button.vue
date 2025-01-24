@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, ref, inject } from 'vue';
 import type { ButtonProps, ButtonEmits, ButtonInstance } from './types';
 import { throttle } from 'lodash-es';
 import HIcon from '../Icon/Icon.vue';
+import { BUTTON_GROUP_CTX_KEY } from './constants';
 defineOptions({
     name: 'HButton'
 })
@@ -14,6 +15,15 @@ const props = withDefaults(defineProps<ButtonProps>(), {
     throttleDuration: 500,
 
 })
+//获取从祖先组件通过依赖注入的方式传递的上下文
+const ctx = inject(BUTTON_GROUP_CTX_KEY)
+//button的size属性
+const size = computed(() => ctx?.size ?? props?.size ?? "");
+//button的type属性
+const type = computed(() => ctx?.type ?? props?.type ?? "");
+//button的disabled属性
+const disabled = computed(() => !!(ctx?.disabled || props?.disabled));
+
 //用于定义插槽，允许父组件向按钮内部插入内容。
 const slots = defineSlots()
 //_ref 是一个响应式引用，用于绑定到按钮元素上，方便后续操作（如获取 DOM 元素）。
@@ -26,6 +36,8 @@ const handleBtnClick = (e: MouseEvent) => emits('click', e);
 const handleBtnClickThrottle = throttle(handleBtnClick, props.throttleDuration, { trailing: false })
 //图标的样式（根据有没有默认slot）
 const iconStyle = computed(() => ({ marginRight: slots.default ? "6px" : '0px' }))
+console.log({ size: size.value, type: type.value, disabled: disabled.value });
+
 //组件暴露的内容
 defineExpose<ButtonInstance>({ ref: _ref })
 </script>
@@ -42,6 +54,7 @@ defineExpose<ButtonInstance>({ ref: _ref })
             'is-circle': circle,
             'is-disabled': disabled,
             'is-loading': loading,
+
         }"
         :autofocus="autofocus"
         :disabled="disabled || loading ? true : void 0"
