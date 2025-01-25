@@ -593,5 +593,589 @@ ButtonGroup组件由多个Button组件构成，可选地传递参数`type`,`size
 
 这就使用了**依赖注入**的方式传递参数。
 
+## 项目打包
 
+项目使用的vite打包工具，所以需要在**core**文件夹下对vite进行配置。打包格式有两种：
 
+1. UMD
+2. ES Module
+
+**ES形式的配置**
+
+```ts
+//这里是使用vite对项目进行ES形式的打包
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
+
+import { resolve } from "path";
+
+export default defineConfig({
+  plugins: [vue()],
+  build: {
+    outDir: "dist/es",
+    lib: {
+      entry: resolve(__dirname, "./index.ts"),
+      name: "hangui",
+      fileName: "index",
+      formats: ["es"],
+    },
+    rollupOptions: {
+      external: [
+        "vue",
+        "@fortawesome/fontawesome-svg-core",
+        "@fortawesome/free-solid-svg-icons",
+        "@fortawesome/vue-fontawesome",
+        "@popperjs/core",
+        "async-validator",
+      ],
+      output: {
+        // TODO:这里的name属性是否合乎vite（v5.1.4）的使用？
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name === "style.css") return "index.css";
+          return assetInfo.name as string;
+        },
+      },
+    },
+  },
+});
+
+```
+
+**UMD形式的配置**
+
+```ts
+//这里是使用vite对项目进行UMD形式的打包
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
+
+import { resolve } from "path";
+
+export default defineConfig({
+  plugins: [vue()],
+  build: {
+    outDir: "dist/umd",
+    lib: {
+      entry: resolve(__dirname, "./index.ts"),
+      name: "hangui",
+      fileName: "index",
+      formats: ["umd"],
+    },
+    rollupOptions: {
+      external: ["vue"],
+      output: {
+        exports: "named",
+        globals: {
+          vue: "Vue",
+        },
+        // TODO:这里的name属性是否合乎vite（v5.1.4）的使用？
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name === "style.css") return "index.css";
+          return assetInfo.name as string;
+        },
+      },
+    },
+  },
+});
+
+```
+
+**修改packages\core\package.json**
+
+添加两条build命令
+
+```json
+{
+  "name": "hangui",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "build-umd": "vite build --config vite.umd.config.ts",
+    "build-es": "vite build --config vite.es.config.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hangui/components": "workspace:*"
+  }
+}
+```
+
+在core目录下执行命令：
+
+```
+npm run build-umd
+npm run build-es
+```
+
+生成打包后的文件：
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-25_14-50-50.png)
+
+安装vite插件使得其他用户使用打包后的包拥有**类型提示**：
+
+1.在core终端执行：
+
+```
+ pnpm add vite-plugin-dts@^3.9.1 -D
+```
+
+2.修改**packages\core\vite.es.config.ts**
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-25_15-15-36.png)
+
+3.再次执行命令：
+
+```
+npm run build-es
+```
+
+4.打包后的结构
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-25_15-17-54.png)
+
+又希望在dist文件夹下有一个type文件夹单独存放类型以及一个es和一个umd文件夹，而且现在生成的类型还是不符合预期。所以进行限制：
+
+1.在根目录新增`tsconfig.build.json`文件
+
+```json
+{
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "preserve",
+    "jsxImportSource": "vue",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": [
+    "packages/core/index.ts",
+    "packages/hooks/**/*.ts",
+    "packages/utils/**/*.ts",
+    "packages/components/index.ts",
+    "packages/components/**/*.vue",
+    "packages/components/**/*.ts"
+  ]
+}
+
+```
+
+2.修改**packages\core\vite.es.config.ts**
+
+```ts
+//这里是使用vite对项目进行ES形式的打包
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
+import dts from "vite-plugin-dts";
+import { resolve } from "path";
+
+export default defineConfig({
+  plugins: [
+    vue(),
+      //修改这里
+    dts({
+      tsconfigPath: "../../tsconfig.build.json",
+      outDir: "dist/types",
+    }),
+  ],
+  build: {
+    outDir: "dist/es",
+    lib: {
+      entry: resolve(__dirname, "./index.ts"),
+      name: "hangui",
+      fileName: "index",
+      formats: ["es"],
+    },
+    rollupOptions: {
+      external: [
+        "vue",
+        "@fortawesome/fontawesome-svg-core",
+        "@fortawesome/free-solid-svg-icons",
+        "@fortawesome/vue-fontawesome",
+        "@popperjs/core",
+        "async-validator",
+      ],
+      output: {
+        // TODO:这里的name属性是否合乎vite（v5.1.4）的使用？
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name === "style.css") return "index.css";
+          return assetInfo.name as string;
+        },
+      },
+    },
+  },
+});
+
+```
+
+3.再次执行命令：
+
+```
+npm run build-es
+```
+
+4.打包结构
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-25_15-28-56.png)
+
+以分包的形式打包
+
+1.修改**packages\core\vite.es.config.ts**
+
+```ts
+//这里是使用vite对项目进行ES形式的打包
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
+import dts from "vite-plugin-dts";
+import { resolve } from "path";
+import { includes } from "lodash-es";
+const COMP_NAMES = [
+  "Button",
+  "Icon",
+  "Alert",
+  "Collapse",
+  "Dropdown",
+  "Form",
+  "Input",
+  "Loading",
+  "Message",
+  "MessageBox",
+  "Overlay",
+  "Popconfirm",
+  "Select",
+  "Switch",
+  "Tooltip",
+  "Upload",
+] as const;
+export default defineConfig({
+  plugins: [
+    vue(),
+    dts({
+      tsconfigPath: "../../tsconfig.build.json",
+      outDir: "dist/types",
+    }),
+  ],
+  build: {
+    outDir: "dist/es",
+    lib: {
+      entry: resolve(__dirname, "./index.ts"),
+      name: "hangui",
+      fileName: "index",
+      formats: ["es"],
+    },
+    rollupOptions: {
+      external: [
+        "vue",
+        "@fortawesome/fontawesome-svg-core",
+        "@fortawesome/free-solid-svg-icons",
+        "@fortawesome/vue-fontawesome",
+        "@popperjs/core",
+        "async-validator",
+      ],
+      output: {
+        // TODO:这里的name属性是否合乎vite（v5.1.4）的使用？
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name === "style.css") return "index.css";
+          return assetInfo.name as string;
+        },
+        manualChunks(id) {
+          if (includes(id, "node_modules")) return "vendor";
+
+          if (includes(id, "/packages/hooks")) return "hooks";
+
+          if (
+            includes(id, "/packages/utils") ||
+            includes(id, "plugin-vue:export-helper")
+          )
+            return "utils";
+          for (const item of COMP_NAMES) {
+            if (includes(id, `/packages/components/${item}`)) {
+              return item;
+            }
+          }
+        },
+      },
+    },
+  },
+});
+
+```
+
+2.再次执行命令：
+
+```
+npm run build-es
+```
+
+3.打包结构
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-25_16-02-50.png)
+
+随后需要将入口的样式文件`packages\core\dist\es\index.css`放到`packages\core\dist\index.css`
+
+1.在**根目录**装工具包
+
+```
+PS D:\Codes\前端学习\18-elemetplus-clone\hangUI> pnpm add move-file-cli@^3.0.0 -Dw
+```
+
+2.在**packages\core\package.json**添加命令
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-25_16-09-55.png)
+
+还需将npm script串联起来
+
+1.在**根目录**装工具包
+
+```
+pnpm add npm-run-all@^4.1.5 -Dw
+```
+
+2.在**packages\core\package.json**添加命令
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-25_16-30-51.png)
+
+3.在package.json添加命令
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-25_16-27-38.png)
+
+4.在根目录执行build
+
+```
+PS D:\Codes\前端学习\18-elemetplus-clone\hangUI> npm run build
+```
+
+5.打包后结构
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-25_16-32-05.png)
+
+最后调整依赖
+
+1.**packages\components\package.json**
+
+```json
+{
+  "name": "@hangui/components",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest --coverage"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@vitest/coverage-v8": "^1.4.0",
+    "@vue/test-utils": "^2.4.5",
+    "jsdom": "^24.0.0"
+  }
+}
+```
+
+**2.packages\core\package.json**
+
+```json
+{
+  "name": "hangui",
+  "version": "1.0.0",
+  "description": "Components library by Vue3 + Ts",
+  "type": "module",
+  "main": "./dist/umd/index.umd.cjs",
+  "module": "./dist/es/index.js",
+  "types": "./dist/types/core/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/es/index.js",
+      "require": "./dist/umd/index.umd.cjs",
+      "types": "./dist/types/core/index.d.ts"
+    },
+    "./dist/": {
+      "import": "./dist/",
+      "require": "./dist/"
+    }
+  },
+  "sideEffects": [
+    "./dist/index.css",
+    "./dist/theme/*.css"
+  ],
+  "scripts": {
+    "build": "run-p build-only move-style",
+    "build-only": "run-p build-es build-umd",
+    "build-umd": "vite build --config vite.umd.config.ts",
+    "build-es": "vite build --config vite.es.config.ts",
+    "move-style": "move-file dist/es/index.css dist/index.css"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.5.2",
+    "@fortawesome/free-solid-svg-icons": "^6.5.2",
+    "@fortawesome/vue-fontawesome": "^3.0.8",
+    "@popperjs/core": "^2.11.8",
+    "async-validator": "^4.2.5"
+  },
+  "devDependencies": {
+    "vite-plugin-dts": "^3.9.1",
+    "@hangui/components": "workspace:*"
+  },
+  "peerDependencies": {
+    "vue": "^3.4.19"
+  }
+}
+```
+
+**3.package.json**
+
+```json
+{
+  "name": "@hangui/workspace",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "pnpm --filter @hangui/play dev",
+    "story": "pnpm --filter @hangui/play storybook",
+    "docs:dev": "pnpm --filter @hangui/docs dev",
+    "docs:build": "pnpm --filter @hangui/docs build",
+    "test": "pnpm --filter @hangui/components test",
+    "build": "pnpm --filter hangui build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/lodash-es": "4.17.12",
+    "@types/node": "^20.11.20",
+    "@vitejs/plugin-vue": "^5.0.4",
+    "@vitejs/plugin-vue-jsx": "^3.1.0",
+    "@vue/tsconfig": "^0.5.1",
+    "@popperjs/core": "^2.11.8",
+    "async-validator": "^4.2.5",
+    "move-file-cli": "^3.0.0",
+    "npm-run-all": "^4.1.5",
+    "postcss-color-mix": "^1.1.0",
+    "postcss-each": "^1.1.0",
+    "postcss-each-variables": "^0.3.0",
+    "postcss-for": "^2.1.1",
+    "postcss-nested": "^6.0.1",
+    "typescript": "^5.6.3",
+    "vite": "^5.1.4",
+    "vitest": "^1.4.0",
+    "vue-tsc": "^1.8.27"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.5.2",
+    "@fortawesome/free-solid-svg-icons": "^6.5.2",
+    "@fortawesome/vue-fontawesome": "^3.0.8",
+    "@hangui/hooks": "workspace:*",
+    "@hangui/theme": "workspace:*",
+    "@hangui/utils": "workspace:*",
+    "hangui": "workspace:*",
+    "lodash-es": "^4.17.21",
+    "vue": "^3.4.19"
+  }
+}
+```
+
+最后的最后：
+
+优化packages\core\vite.es.config.ts
+
+```ts
+//这里是使用vite对项目进行ES形式的打包
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
+import dts from "vite-plugin-dts";
+import { readdirSync, readdir } from "fs";
+import { resolve } from "path";
+import { defer, delay, filter, map, includes } from "lodash-es";
+//替换了原本的数组常量
+function getDirectoriesSync(basePath: string) {
+  const entries = readdirSync(basePath, { withFileTypes: true });
+
+  return map(
+    filter(entries, (entry) => entry.isDirectory()),
+    (entry) => entry.name
+  );
+}
+export default defineConfig({
+  plugins: [
+    vue(),
+    dts({
+      tsconfigPath: "../../tsconfig.build.json",
+      outDir: "dist/types",
+    }),
+  ],
+  build: {
+    outDir: "dist/es",
+    lib: {
+      entry: resolve(__dirname, "./index.ts"),
+      name: "hangui",
+      fileName: "index",
+      formats: ["es"],
+    },
+    rollupOptions: {
+      external: [
+        "vue",
+        "@fortawesome/fontawesome-svg-core",
+        "@fortawesome/free-solid-svg-icons",
+        "@fortawesome/vue-fontawesome",
+        "@popperjs/core",
+        "async-validator",
+      ],
+      output: {
+        // TODO:这里的name属性是否合乎vite（v5.1.4）的使用？
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name === "style.css") return "index.css";
+          return assetInfo.name as string;
+        },
+        manualChunks(id) {
+          if (includes(id, "node_modules")) return "vendor";
+
+          if (includes(id, "/packages/hooks")) return "hooks";
+
+          if (
+            includes(id, "/packages/utils") ||
+            includes(id, "plugin-vue:export-helper")
+          )
+            return "utils";
+          for (const item of getDirectoriesSync("../components")) {
+            if (includes(id, `/packages/components/${item}`)) {
+              return item;
+            }
+          }
+        },
+      },
+    },
+  },
+});
+
+```
+
+修改入口文件中的路径问题：
+
+**packages\core\index.ts**
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-25_17-38-15.png)

@@ -8,6 +8,6 @@ import "@hangui/theme/index.css";
 library.add(fas);
 //通过返回的 installer，可以将整个插件集合作为一个插件进行统一安装。
 const installer = makeInstaller(components);
-//core作为所有组件暴露的出口
-export * from "@hangui/components";
+//core作为所有组件暴露的出口(使用@hangui形式在打包后类型是找不到的，使用相对路径)
+export * from "../components";
 export default installer;
