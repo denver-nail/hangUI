@@ -7,7 +7,7 @@ defineOptions({
     name: "HButtonGroup",
 });
 const props = defineProps<ButtonGroupProps>();
-
+// 通过依赖注入的方式将数据提供给子组件
 provide(
     BUTTON_GROUP_CTX_KEY,
     reactive({

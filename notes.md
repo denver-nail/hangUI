@@ -587,5 +587,11 @@ pnpm dlx storybook@latest init
 1. **避免冲突：** 确保 `$attrs` 中的属性不会与组件自身的 `props` 或 `v-bind` 属性冲突，否则可能会被覆盖。
 2. **可读性：** 虽然 `v-bind="$attrs"` 提供了很大灵活性，但在复杂组件中，手动筛选并明确绑定重要属性更能提高代码可读性。
 
+## 结合Button组件编写ButtonGroup组件
+
+ButtonGroup组件由多个Button组件构成，可选地传递参数`type`,`size` ,`disabled`给Button组件。
+
+这就使用了**依赖注入**的方式传递参数。
+
 
 
