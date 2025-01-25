@@ -1,6 +1,6 @@
 import type { Meta, StoryObj, ArgTypes } from "@storybook/vue3";
 import { fn, within, userEvent, expect } from "@storybook/test";
-import { HButton, HButtonGroup } from "hangui";
+import { HButton, HButtonGroup } from "@purple-liu/hangui";
 
 type Story = StoryObj<typeof HButton> & { argTypes?: ArgTypes };
 const meta: Meta<typeof HButton> = {

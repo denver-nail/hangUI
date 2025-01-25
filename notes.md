@@ -1179,3 +1179,80 @@ export default defineConfig({
 **packages\core\index.ts**
 
 ![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-25_17-38-15.png)
+
+## npm发布
+
+1.登录npm
+
+执行命令:
+
+```
+nrm use npm
+```
+
+执行命令：
+
+```
+npm login
+```
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-25_20-31-06.png)
+
+2.修改版本号**packages\core\package.json**
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-25_20-40-35.png)
+
+>  3.包名重复修改:注意！！！！！
+
+由于包名hangui重复,所以需要更改包名.所以对应的地方都要相应修改(**带有命名空间**):
+
+`hangui `修改成`@purple-liu/hangui` 
+
+4.在打包的文件目录执行命令
+
+```
+npm publish --access=public
+```
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-25_21-19-58.png)
+
+### 更优雅的打包
+
+避免每次上传新的版本都需要手动修改版本号.
+
+1.在根目录执行命令安装
+
+```
+pnpm add rimraf -Dw
+```
+
+`rimraf`用于每次打包前清理dist文件,避免上一次打包的缓存影响最新一次的打包.
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-25_21-33-45.png)
+
+2.在根目录执行命令安装
+
+```
+pnpm add release-it -Dw
+```
+
+`release-it`用于发布时自动更新版本号
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-25_21-36-32.png)
+
+使用:
+
+1.将项目中的修改全部提交到github,使得git工作树处于一个干净的状态.
+
+2.设定git默认分支:
+
+```
+git push --set-upstream orgin main
+```
+
+3.执行命令
+
+```
+npm run 
+```
+
