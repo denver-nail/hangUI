@@ -1253,6 +1253,16 @@ git push --set-upstream orgin main
 3.执行命令
 
 ```
-npm run 
+npm run release
 ```
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-25_21-48-11.png)
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-25_21-49-02.png)
+
+## 编写Collapse组件
+
+### 不使用v-modal版本
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-26_23-26-13.png)
 

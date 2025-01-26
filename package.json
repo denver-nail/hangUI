@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "pnpm --filter @hangui/play dev",
-    "story": "pnpm --filter @hangui/play storybook",
+    "story:play": "pnpm --filter @hangui/play storybook",
+    "story": "run-s build story:play",
     "docs:dev": "pnpm --filter @hangui/docs dev",
     "docs:build": "pnpm --filter @hangui/docs build",
     "test": "pnpm --filter @hangui/components test",

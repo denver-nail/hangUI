@@ -3,3 +3,5 @@
 export * from "./Button";
 //导出Icon组件
 export * from "./Icon";
+//导出Collapse组件
+export * from "./Collapse";
