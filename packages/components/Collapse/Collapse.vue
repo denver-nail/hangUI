@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { CollapseProps, CollapseEmits, CollapseItemName } from './types';
-import { ref, provide, watch } from 'vue';
+import { ref, provide, watch, watchEffect } from 'vue';
 import { COLLAPSE_CTX_KEY } from './constants';
 defineOptions({
     name: 'HCollapse'
@@ -11,10 +11,13 @@ const props = defineProps<CollapseProps>()
 const emits = defineEmits<CollapseEmits>();
 //记录激活状态的Item名字
 const activeNames = ref(props.modelValue)
-//手风琴模式下如果激活状态下的itme数目大于1则报错
-if (props.accordion && activeNames.value.length > 1) {
-    console.warn("accordion mode should only have one active item]");
-}
+//手风琴模式下如果激活状态下的itme数目大于1则报错(一直监听props中的相关属性的变化)
+watchEffect(() => {
+    if (props.accordion && activeNames.value.length > 1) {
+        console.warn("accordion mode should only have one active item]");
+    }
+})
+
 //折叠面板组件的每一个小item的点击事件
 function handleItemClick(item: CollapseItemName) {
     //
