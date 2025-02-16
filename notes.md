@@ -1266,3 +1266,616 @@ npm run release
 
 ![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-26_23-26-13.png)
 
+## 打包优化
+
+### 1.CSS样式分包实现按需引入
+
+**packages\core\vite.es.config.ts**
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_17-04-32.png)
+
+### 2.将组件相关的css放到theme文件夹下
+
+1）修改**packages\core\vite.es.config.ts**
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_17-26-57.png)
+
+2）修改**packages\core\package.json**
+
+> 这里删除了move-style的使用，后续会自己写一个插件实现该功能
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_17-25-43.png)
+
+3）pnpm build 结果
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_17-28-19.png)
+
+### 3.压缩umd
+
+在core下执行命令：
+
+```
+PS D:\Codes\前端学习\18-elemetplus-clone\hangUI\packages\core>
+pnpm add vite-plugin-compression2 -D
+```
+
+修改**packages\core\vite.umd.config.ts**
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_17-35-59.png)
+
+压缩结果
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_17-36-55.png)
+
+### 4.编写vite插件
+
+功能：实现在build项目前删除上一次构建的项目相关文件以及在本次build项目后移动文件的位置。
+
+执行命令：
+
+```
+PS D:\Codes\前端学习\18-elemetplus-clone\hangUI\packages\core>
+pnpm add shelljs -wD
+pnpm add @types/shelljs -wD
+```
+
+删除相关的包：
+
+**package.json**
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_19-54-49.png)
+
+删除相关命令：
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_20-52-59.png)
+
+**packages\core\hooksPlugins.ts**
+
+```ts
+import { each, isFunction } from "lodash-es";
+import shell from "shelljs";
+/**
+ 如果传入了 rmfiles 参数，插件会在构建开始时删除指定的文件。
+执行自定义操作： 如果传入了 beforeBuild 和 afterBuild 函数，它们会分别在构建开始前和结束后被调用。
+ */
+export default function hooksPlugin({
+  rmfiles = [],
+  beforeBuild,
+  afterBuild,
+}: {
+  rmfiles?: string[];
+  beforeBuild?: Function;
+  afterBuild?: Function;
+}) {
+  return {
+    name: "hooks-plugin",
+    buildStart() {
+      each(rmfiles, (fName) => shell.rm("-rf", fName));
+      isFunction(beforeBuild) && beforeBuild();
+    },
+    buildEnd(err?: Error) {
+      !err && isFunction(afterBuild) && afterBuild();
+    },
+  };
+}
+
+```
+
+修改**packages\core\vite.umd.config.ts**
+
+```ts
+//这里是使用vite对项目进行UMD形式的打包
+import { defineConfig } from "vite";
+import { compression } from "vite-plugin-compression2";
+import vue from "@vitejs/plugin-vue";
+import hooks from "./hooksPlugins";
+import { resolve } from "path";
+import { readFileSync } from "fs";
+import shell from "shelljs";
+import { delay } from "lodash-es";
+//自己编写的在打包好后移动style.css文件的函数
+const TRY_MOVE_STYLES_DELAY = 800 as const;
+function moveStyle() {
+  try {
+    //读文件的作用是保证打包完成后再移动文件
+    readFileSync("./dist/umd/index.css.gz");
+    shell.cp("./dist//umd/index.css", "./dist/index.css");
+  } catch (_) {
+    delay(moveStyle, TRY_MOVE_STYLES_DELAY);
+  }
+}
+
+export default defineConfig({
+  plugins: [
+    vue(),
+    compression({
+      include: /.(cjs|css)$/i,
+    }),
+    hooks({
+      rmfiles: ["./dist/umd/", "./dist/index.css"],
+      afterBuild: moveStyle,
+    }),
+  ],
+  build: {
+    outDir: "dist/umd",
+    lib: {
+      entry: resolve(__dirname, "./index.ts"),
+      name: "hangui",
+      fileName: "index",
+      formats: ["umd"],
+    },
+    rollupOptions: {
+      external: ["vue"],
+      output: {
+        exports: "named",
+        globals: {
+          vue: "Vue",
+        },
+        // TODO:这里的name属性是否合乎vite（v5.1.4）的使用？
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name === "style.css") return "index.css";
+          return assetInfo.name as string;
+        },
+      },
+    },
+  },
+});
+
+```
+
+修改**packages\core\vite.es.config.ts**
+
+```ts
+//这里是使用vite对项目进行ES形式的打包
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
+import dts from "vite-plugin-dts";
+import { readdirSync } from "fs";
+import { resolve } from "path";
+import { delay, filter, map, includes } from "lodash-es";
+import shell from "shelljs";
+import hooks from "./hooksPlugins";
+//自己编写的在打包好后移动theme文件夹的函数
+const TRY_MOVE_STYLES_DELAY = 800 as const;
+function moveStyle() {
+  try {
+    //读文件的作用是保证打包完成后再移动文件
+    readdirSync("./dist/es/theme");
+    shell.mv("./dist/es/theme", "./dist/");
+  } catch (_) {
+    delay(moveStyle, TRY_MOVE_STYLES_DELAY);
+  }
+}
+//同步获取指定目录下的所有子目录的名称。
+function getDirectoriesSync(basePath: string) {
+  const entries = readdirSync(basePath, { withFileTypes: true });
+
+  return map(
+    filter(entries, (entry) => entry.isDirectory()),
+    (entry) => entry.name
+  );
+}
+export default defineConfig({
+  plugins: [
+    vue(),
+    dts({
+      tsconfigPath: "../../tsconfig.build.json",
+      outDir: "dist/types",
+    }),
+    hooks({
+      rmfiles: ["./dist/es", "./dist/theme", "./dist/types"],
+      afterBuild: moveStyle,
+    }),
+  ],
+  build: {
+    outDir: "dist/es",
+    // css样式是否分包
+    cssCodeSplit: true,
+    lib: {
+      entry: resolve(__dirname, "./index.ts"),
+      name: "hangui",
+      fileName: "index",
+      formats: ["es"],
+    },
+    rollupOptions: {
+      external: [
+        "vue",
+        "@fortawesome/fontawesome-svg-core",
+        "@fortawesome/free-solid-svg-icons",
+        "@fortawesome/vue-fontawesome",
+        "@popperjs/core",
+        "async-validator",
+      ],
+      output: {
+        // TODO:这里的name属性是否合乎vite（v5.1.4）的使用？
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name === "style.css") return "index.css";
+          if (
+            assetInfo.type === "asset" &&
+            /\.(css)$/i.test(assetInfo.name as string)
+          ) {
+            return "theme/[name].[ext]";
+          }
+          return assetInfo.name as string;
+        },
+        manualChunks(id) {
+          if (includes(id, "node_modules")) return "vendor";
+
+          if (includes(id, "/packages/hooks")) return "hooks";
+
+          if (
+            includes(id, "/packages/utils") ||
+            includes(id, "plugin-vue:export-helper")
+          )
+            return "utils";
+          for (const item of getDirectoriesSync("../components")) {
+            if (includes(id, `/packages/components/${item}`)) {
+              return item;
+            }
+          }
+        },
+      },
+    },
+  },
+});
+
+```
+
+执行build的效果：
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_20-53-58.png)
+
+### 5.解决在core/index中使用@形式的路径打包后找不到的问题
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_21-57-46.png)
+
+修改**tsconfig.build.json**
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_22-04-49.png)
+
+### 6.代码混淆 和压缩等配置
+
+执行命令：
+
+```
+PS D:\Codes\前端学习\18-elemetplus-clone\hangUI\packages\core>
+  pnpm add terser @rollup/plugin-terser -D
+```
+
+```
+PS D:\Codes\前端学习\18-elemetplus-clone\hangUI> pnpm add cross-env -wD
+```
+
+修改**packages\core\vite.es.config.ts**
+
+```ts
+//这里是使用vite对项目进行ES形式的打包
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
+import dts from "vite-plugin-dts";
+import { readdirSync } from "fs";
+import { resolve } from "path";
+import { delay, filter, map, includes } from "lodash-es";
+import shell from "shelljs";
+import hooks from "./hooksPlugins";
+import terser from "@rollup/plugin-terser";
+//自己编写的在打包好后移动theme文件夹的函数
+const TRY_MOVE_STYLES_DELAY = 800 as const;
+const isProd = process.env.NODE_ENV === "production";
+const isDev = process.env.NODE_ENV === "development";
+const isTest = process.env.NODE_ENV === "test";
+function moveStyle() {
+  try {
+    //读文件的作用是保证打包完成后再移动文件
+    readdirSync("./dist/es/theme");
+    shell.mv("./dist/es/theme", "./dist/");
+  } catch (_) {
+    delay(moveStyle, TRY_MOVE_STYLES_DELAY);
+  }
+}
+//同步获取指定目录下的所有子目录的名称。
+function getDirectoriesSync(basePath: string) {
+  const entries = readdirSync(basePath, { withFileTypes: true });
+
+  return map(
+    filter(entries, (entry) => entry.isDirectory()),
+    (entry) => entry.name
+  );
+}
+export default defineConfig({
+  plugins: [
+    vue(),
+    dts({
+      tsconfigPath: "../../tsconfig.build.json",
+      outDir: "dist/types",
+    }),
+    hooks({
+      rmfiles: ["./dist/es", "./dist/theme", "./dist/types"],
+      afterBuild: moveStyle,
+    }),
+
+    terser({
+      //配置压缩
+      compress: {
+        sequences: isProd,
+        arguments: isProd,
+        drop_console: isProd && ["log"],
+        passes: isProd ? 4 : 1,
+        //条件编译
+        global_defs: {
+          "@DEV": JSON.stringify(isDev),
+          "@PROD": JSON.stringify(isProd),
+          TEST: JSON.stringify(isTest),
+        },
+      },
+      //配置格式化相关
+      format: {
+        semicolons: false,
+        shorthand: isProd,
+        braces: !isProd,
+        beautify: !isProd,
+        comments: !isProd,
+      },
+      //配置混淆
+      mangle: {
+        toplevel: isProd,
+        eval: isProd,
+        keep_classnames: isDev,
+        keep_fnames: isDev,
+      },
+    }),
+  ],
+  build: {
+    outDir: "dist/es",
+    minify: false, //关闭默认混淆
+    // css样式是否分包
+    cssCodeSplit: true,
+    lib: {
+      entry: resolve(__dirname, "./index.ts"),
+      name: "hangui",
+      fileName: "index",
+      formats: ["es"],
+    },
+    rollupOptions: {
+      external: [
+        "vue",
+        "@fortawesome/fontawesome-svg-core",
+        "@fortawesome/free-solid-svg-icons",
+        "@fortawesome/vue-fontawesome",
+        "@popperjs/core",
+        "async-validator",
+      ],
+      output: {
+        // TODO:这里的name属性是否合乎vite（v5.1.4）的使用？
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name === "style.css") return "index.css";
+          if (
+            assetInfo.type === "asset" &&
+            /\.(css)$/i.test(assetInfo.name as string)
+          ) {
+            return "theme/[name].[ext]";
+          }
+          return assetInfo.name as string;
+        },
+        manualChunks(id) {
+          if (includes(id, "node_modules")) return "vendor";
+
+          if (includes(id, "/packages/hooks")) return "hooks";
+
+          if (
+            includes(id, "/packages/utils") ||
+            includes(id, "plugin-vue:export-helper")
+          )
+            return "utils";
+          for (const item of getDirectoriesSync("../components")) {
+            if (includes(id, `/packages/components/${item}`)) {
+              return item;
+            }
+          }
+        },
+      },
+    },
+  },
+});
+
+```
+
+**packages\core\vite.umd.config.ts**
+
+```ts
+//这里是使用vite对项目进行UMD形式的打包
+import { defineConfig } from "vite";
+import { compression } from "vite-plugin-compression2";
+import vue from "@vitejs/plugin-vue";
+import hooks from "./hooksPlugins";
+import { resolve } from "path";
+import { readFileSync } from "fs";
+import shell from "shelljs";
+import { delay } from "lodash-es";
+import terser from "@rollup/plugin-terser";
+const isProd = process.env.NODE_ENV === "production";
+const isDev = process.env.NODE_ENV === "development";
+const isTest = process.env.NODE_ENV === "test";
+//自己编写的在打包好后移动style.css文件的函数
+const TRY_MOVE_STYLES_DELAY = 800 as const;
+function moveStyle() {
+  try {
+    //读文件的作用是保证打包完成后再移动文件
+    readFileSync("./dist/umd/index.css.gz");
+    shell.cp("./dist//umd/index.css", "./dist/index.css");
+  } catch (_) {
+    delay(moveStyle, TRY_MOVE_STYLES_DELAY);
+  }
+}
+
+export default defineConfig({
+  plugins: [
+    vue(),
+    compression({
+      include: /.(cjs|css)$/i,
+    }),
+    hooks({
+      rmfiles: ["./dist/umd/", "./dist/index.css"],
+      afterBuild: moveStyle,
+    }),
+    terser({
+      //配置压缩
+      compress: {
+        drop_console: ["log"],
+        drop_debugger: true,
+        passes: 3,
+        //条件编译
+        global_defs: {
+          "@DEV": JSON.stringify(isDev),
+          "@PROD": JSON.stringify(isProd),
+          "@TEST": JSON.stringify(isTest),
+        },
+      },
+    }),
+  ],
+  build: {
+    outDir: "dist/umd",
+    lib: {
+      entry: resolve(__dirname, "./index.ts"),
+      name: "hangui",
+      fileName: "index",
+      formats: ["umd"],
+    },
+    rollupOptions: {
+      external: ["vue"],
+      output: {
+        exports: "named",
+        globals: {
+          vue: "Vue",
+        },
+        // TODO:这里的name属性是否合乎vite（v5.1.4）的使用？
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name === "style.css") return "index.css";
+          return assetInfo.name as string;
+        },
+      },
+    },
+  },
+});
+
+```
+
+条件编译后续相关修改：
+
+1）新建**packages\core\printLogo.ts**
+
+```ts
+export default function () {
+    if (PROD) {
+      const logo = `
+      
+  __________________________________________________
+  
+       __                          _______  _______ 
+      |  |--..---.-..-----..-----.|   |   ||_     _|
+      |     ||  _  ||     ||  _  ||   |   | _|   |_ 
+      |__|__||___._||__|__||___  ||_______||_______|
+                           |_____|                                                 
+  ____________________________________________________________________________________
+                                 author:Hang
+  `;
+  
+      const rainbowGradient = `
+  background: linear-gradient(135deg, orange 60%, cyan);
+  background-clip: text;
+  color: transparent;
+  font-size: 16px; 
+  line-height: 1;
+  font-family: monospace;
+  font-weight: 600;
+  `;
+  
+      console.info(`%c${logo}`, rainbowGradient);
+    } else if (DEV) {
+      console.log("[HangUI]:dev mode...");
+    }
+  }
+```
+
+
+
+2）新建**env.d.ts**
+
+```
+declare const PROD: boolean;
+declare const DEV: boolean;
+declare const TEST: boolean;
+```
+
+3）修改**tsconfig.build.json**
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_23-11-18.png)
+
+4）修改**tsconfig.json**
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_23-11-43.png)
+
+5）修改**packages\core\package.json**
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_23-25-12.png)
+
+6）修改**package.json**
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_23-44-38.png)
+
+7）修改**packages\core\index.ts**
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_23-37-57.png)
+
+8）演示
+
+执行步骤：
+
+在一个终端执行：
+
+```
+PS D:\Codes\前端学习\18-elemetplus-clone\hangUI> pnpm build:dev
+```
+
+重新开一个终端执行：
+
+```
+PS D:\Codes\前端学习\18-elemetplus-clone\hangUI> pnpm dev
+```
+
+当项目代码变化时，会自动重新打包，重新运行。
+
+运行`build:dev`和`build`：
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_23-36-27.png)
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_23-37-10.png)
+
+执行`pnpm dev`:
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_23-46-58.png)
+
+### 7.展示按需引入的使用
+
+修改**packages\play\.storybook\preview.js**
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_23-52-07.png)
+
+修改**packages\play\src\stories\Button.stories.ts**和**packages\play\src\stories\Collapse.stories.ts**
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-17_00-03-31.png)
+
+结果：
+
+执行命令：
+
+```
+PS D:\Codes\前端学习\18-elemetplus-clone\hangUI\packages\play> pnpm build-storybook
+http-server .\storybook-static
+```
+
+
+
+> 在网络请求中没有请求其他组件的内容，在js文件中也将Icon组件集成到了Button组件相关的js中
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-17_00-14-11.png)

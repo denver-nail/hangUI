@@ -36,7 +36,7 @@ const handleBtnClick = (e: MouseEvent) => emits('click', e);
 const handleBtnClickThrottle = throttle(handleBtnClick, props.throttleDuration, { trailing: false })
 //图标的样式（根据有没有默认slot）
 const iconStyle = computed(() => ({ marginRight: slots.default ? "6px" : '0px' }))
-console.log({ size: size.value, type: type.value, disabled: disabled.value });
+
 
 //组件暴露的内容
 defineExpose<ButtonInstance>({ ref: _ref })

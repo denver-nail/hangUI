@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/vue3";
 import { HCollapse, HCollapseItem } from "@purple-liu/hangui";
-import "@purple-liu/hangui/dist/index.css";
+// import "@purple-liu/hangui/dist/index.css";
+import "@purple-liu/hangui/dist/theme/Collapse.css";
 type Story = StoryObj<typeof HCollapse>;
 
 const meta: Meta<typeof HCollapse> = {
