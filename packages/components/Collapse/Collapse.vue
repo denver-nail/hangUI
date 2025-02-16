@@ -2,8 +2,10 @@
 import type { CollapseProps, CollapseEmits, CollapseItemName } from './types';
 import { ref, provide, watch, watchEffect } from 'vue';
 import { COLLAPSE_CTX_KEY } from './constants';
+import { debugWarn } from '@hangui/utils';
+const COM_NAME = 'HCollapse' as const
 defineOptions({
-    name: 'HCollapse'
+    name: COM_NAME
 })
 //定义的所需参数
 const props = defineProps<CollapseProps>()
@@ -14,7 +16,8 @@ const activeNames = ref(props.modelValue)
 //手风琴模式下如果激活状态下的itme数目大于1则报错(一直监听props中的相关属性的变化)
 watchEffect(() => {
     if (props.accordion && activeNames.value.length > 1) {
-        console.warn("accordion mode should only have one active item]");
+        //使用自己封装的报错方法
+        debugWarn(COM_NAME, "accordion mode should only have one active item")
     }
 })
 
