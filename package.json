@@ -3,14 +3,16 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "dev": "pnpm --filter @hangui/play dev",
     "story": "pnpm --filter @hangui/play storybook",
-    "docs:dev": "pnpm --filter @hangui/docs dev",
-    "docs:build": "pnpm --filter @hangui/docs build",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
     "test": "cross-env NODE_ENV=test pnpm --filter @hangui/components test",
     "build": "cross-env NODE_ENV=production pnpm --filter @purple-liu/hangui build",
-    "build:dev": "cross-env NODE_ENV=development pnpm --filter @purple-liu/hangui build:watch"
+    "build:dev": "cross-env NODE_ENV=development pnpm --filter @purple-liu/hangui build:watch",
+    "docs:preview": "vitepress preview docs"
   },
   "keywords": [],
   "author": "",
@@ -35,6 +37,7 @@
     "shelljs": "^0.8.5",
     "typescript": "^5.6.3",
     "vite": "^5.1.4",
+    "vitepress": "1.0.0-rc.44",
     "vitest": "^1.4.0",
     "vue-tsc": "^1.8.27"
   },

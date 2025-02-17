@@ -2,9 +2,9 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import dts from "vite-plugin-dts";
-import { readdirSync } from "fs";
+import { readdir, readdirSync } from "fs";
 import { resolve } from "path";
-import { delay, filter, map, includes } from "lodash-es";
+import { delay, filter, map, includes, defer } from "lodash-es";
 import shell from "shelljs";
 import hooks from "./hooksPlugins";
 import terser from "@rollup/plugin-terser";
@@ -14,13 +14,11 @@ const isTest = process.env.NODE_ENV === "test";
 //自己编写的在打包好后移动theme文件夹的函数
 const TRY_MOVE_STYLES_DELAY = 800 as const;
 function moveStyle() {
-  try {
-    //读文件的作用是保证打包完成后再移动文件
-    readdirSync("./dist/es/theme");
-    shell.mv("./dist/es/theme", "./dist/");
-  } catch (_) {
-    delay(moveStyle, TRY_MOVE_STYLES_DELAY);
-  }
+  //读文件的作用是保证打包完成后再移动文件
+  readdir("./dist/es/theme", (err) => {
+    if (err) return delay(moveStyle, TRY_MOVE_STYLES_DELAY);
+    defer(() => shell.mv("./dist/es/theme", "./dist/"));
+  });
 }
 //同步获取指定目录下的所有子目录的名称。
 function getDirectoriesSync(basePath: string) {

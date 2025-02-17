@@ -1884,3 +1884,21 @@ http-server .\storybook-static
 
 ## 使用vitepress搭建组件文档
 
+### 1）下载vitepress
+
+```
+PS D:\Codes\前端学习\18-elemetplus-clone\hangUI> pnpm add -wD vitepress
+```
+
+### 2）初始化
+
+```
+pnpm vitepress init
+```
+
+### 3）运行
+
+```
+ pnpm run docs:dev
+```
+

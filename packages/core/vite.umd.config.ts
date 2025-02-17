@@ -1,8 +1,8 @@
 //这里是使用vite对项目进行UMD形式的打包
 import { defineConfig } from "vite";
-import { delay } from "lodash-es";
+import { defer, delay } from "lodash-es";
 import { resolve } from "path";
-import { readFileSync } from "fs";
+import { readFile } from "fs";
 import { compression } from "vite-plugin-compression2";
 
 import hooks from "./hooksPlugins";
@@ -15,13 +15,11 @@ const isTest = process.env.NODE_ENV === "test";
 //自己编写的在打包好后移动style.css文件的函数
 const TRY_MOVE_STYLES_DELAY = 800 as const;
 function moveStyle() {
-  try {
-    //读文件的作用是保证打包完成后再移动文件
-    readFileSync("./dist/umd/index.css.gz");
-    shell.cp("./dist//umd/index.css", "./dist/index.css");
-  } catch (_) {
-    delay(moveStyle, TRY_MOVE_STYLES_DELAY);
-  }
+  //读文件的作用是保证打包完成后再移动文件
+  readFile("./dist/umd/index.css.gz", (err) => {
+    if (err) delay(moveStyle, TRY_MOVE_STYLES_DELAY);
+    defer(() => shell.cp("./dist/umd/index.css", "./dist/index.css"));
+  });
 }
 
 export default defineConfig({
