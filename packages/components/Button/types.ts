@@ -1,4 +1,4 @@
-import type { Component, Ref } from "vue";
+import type { Component, ComputedRef, Ref } from "vue";
 
 // 这里是Button组件的类型定义文件
 export type ButtonType = "primary" | "success" | "warning" | "danger" | "info";
@@ -28,6 +28,9 @@ export interface ButtonEmits {
 //button组件暴露的内容的类型
 export interface ButtonInstance {
   ref: Ref<HTMLButtonElement | void>;
+  disabled: ComputedRef<boolean>;
+  size: ComputedRef<ButtonSize | "">;
+  type: ComputedRef<ButtonType | "">;
 }
 //buttonGroup组件所需参数的类型
 export interface ButtonGroupProps {

@@ -39,7 +39,7 @@ const iconStyle = computed(() => ({ marginRight: slots.default ? "6px" : '0px' }
 
 
 //组件暴露的内容
-defineExpose<ButtonInstance>({ ref: _ref })
+defineExpose<ButtonInstance>({ ref: _ref, disabled, size, type })
 </script>
 <template>
     <component
