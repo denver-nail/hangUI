@@ -5,3 +5,5 @@ export * from "./Button";
 export * from "./Icon";
 //导出Collapse组件
 export * from "./Collapse";
+//导出Alert组件
+export * from "./Alert";
