@@ -18,9 +18,11 @@ jobs:
 
       - name: Setup Node
         uses: actions/setup-node@v3
+        with:
+          node-version: "20.x" # 使用你本地的 Node.js 版本
 
       - name: Install pnpm
-        run: npm install -g pnpm
+        run: npm install -g pnpm@8.15.6 # 安装与你本地相同版本的 pnpm
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
