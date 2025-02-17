@@ -24,6 +24,7 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+        working-directory: ./
 
       - name: Run tests
         run: npm run test
