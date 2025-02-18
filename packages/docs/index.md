@@ -3,7 +3,7 @@
 layout: home
 
 hero:
-  name: "HangUI"
+  name: "hangUI"
   text: "组件库"
   tagline: My great project tagline
   actions:

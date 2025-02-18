@@ -3,18 +3,17 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "dev": "pnpm --filter @hangui/play dev",
     "story": "pnpm --filter @hangui/play storybook",
-    "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
+    "docs:dev": " pnpm --filter @hangui/docs  dev",
+    "docs:build": "pnpm --filter @hangui/docs build",
+    "docs:preview": "pnpm --filter @hangui/docs preview",
     "test-comp": "cross-env NODE_ENV=test pnpm --filter @hangui/components test",
     "test-utils": "cross-env NODE_ENV=test pnpm --filter @hangui/utils test",
     "test": "run-p test-utils test-comp",
     "build": "cross-env NODE_ENV=production pnpm --filter @purple-liu/hangui build",
-    "build:dev": "cross-env NODE_ENV=development pnpm --filter @purple-liu/hangui build:watch",
-    "docs:preview": "vitepress preview docs"
+    "build:dev": "cross-env NODE_ENV=development pnpm --filter @purple-liu/hangui build:watch"
   },
   "keywords": [],
   "author": "",

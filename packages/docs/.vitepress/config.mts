@@ -2,9 +2,8 @@ import { defineConfig } from "vitepress";
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: "HangUI",
+  title: "hangUI",
   description: "组件库",
-  // base 配置项用于设置生成的静态网站的基础路径.需要与github仓库同名
   base: "/hangUI/",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config

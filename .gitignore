@@ -31,8 +31,8 @@ dist-ssr
 *.sw?
 
 #vitepress
-docs/.vitepress/dist
-docs/.vitepress/cache
+packages/docs/.vitepress/dist
+packages/docs/.vitepress/cache
 
 *storybook.log
 storybook-static

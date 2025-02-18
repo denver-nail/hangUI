@@ -1896,6 +1896,8 @@ PS D:\Codes\前端学习\18-elemetplus-clone\hangUI> pnpm add -wD vitepress
 pnpm vitepress init
 ```
 
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-18_15-56-32.png)
+
 ### 3）运行
 
 ```
