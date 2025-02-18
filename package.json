@@ -9,7 +9,9 @@
     "story": "pnpm --filter @hangui/play storybook",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
-    "test": "cross-env NODE_ENV=test pnpm --filter @hangui/components test",
+    "test-comp": "cross-env NODE_ENV=test pnpm --filter @hangui/components test",
+    "test-utils": "cross-env NODE_ENV=test pnpm --filter @hangui/utils test",
+    "test": "run-p test-utils test-comp",
     "build": "cross-env NODE_ENV=production pnpm --filter @purple-liu/hangui build",
     "build:dev": "cross-env NODE_ENV=development pnpm --filter @purple-liu/hangui build:watch",
     "docs:preview": "vitepress preview docs"
@@ -50,6 +52,9 @@
     "@hangui/utils": "workspace:*",
     "@purple-liu/hangui": "workspace:*",
     "lodash-es": "^4.17.21",
+    "@vitest/coverage-v8": "^1.4.0",
+    "@vue/test-utils": "^2.4.5",
+    "jsdom": "^24.0.0",
     "vue": "^3.4.19"
   }
 }

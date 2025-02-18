@@ -165,7 +165,7 @@ describe("Collapse.vue", () => {
       `
         [
           [
-            [HUIError: HCollapse],
+            [HUIError: [HCollapse]:accordion mode should only have one active item],
           ],
         ]
       `

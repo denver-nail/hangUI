@@ -1902,3 +1902,13 @@ pnpm vitepress init
  pnpm run docs:dev
 ```
 
+## 提高测试用例覆盖率
+
+当前测试用例覆盖率：
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-17_20-34-24.png)
+
+提高后：
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-18_15-19-34.png)
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-18_15-19-49.png)

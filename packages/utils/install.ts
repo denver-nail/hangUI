@@ -13,7 +13,7 @@ export function makeInstaller(components: Plugin[]) {
 component: T 表示 component 参数的类型是 T，这个类型将在调用 withInstall 时确定。 */
 export const withInstall = <T>(component: T) => {
   (component as SFCWithInstall<T>).install = (app: App) => {
-    const name = (component as any)?.name || "UnnamedComponent";
+    const name = (component as any).name;
     app.component(name, component as SFCWithInstall<T>);
   };
   return component as SFCWithInstall<T>;
