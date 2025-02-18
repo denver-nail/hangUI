@@ -1914,3 +1914,12 @@ PS D:\Codes\前端学习\18-elemetplus-clone\hangUI\packages\docs> pnpm vitepres
 
 ![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-18_15-19-34.png)
 ![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-18_15-19-49.png)
+
+## 成功部署到github上
+
+注意点：
+
+1. 项目仓库需要是public
+2. 检查workflow的yml的配置
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-18_16-16-40.png)
