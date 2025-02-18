@@ -1893,7 +1893,7 @@ PS D:\Codes\前端学习\18-elemetplus-clone\hangUI> pnpm add -wD vitepress
 ### 2）初始化
 
 ```
-pnpm vitepress init
+PS D:\Codes\前端学习\18-elemetplus-clone\hangUI\packages\docs> pnpm vitepress init
 ```
 
 ![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-18_15-56-32.png)
