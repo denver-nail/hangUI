@@ -2,6 +2,12 @@
 import { ref } from "vue";
 
 const buttonRef = ref(null);
+function popConfirm() {
+  console.log("confirm");
+}
+function popCancel() {
+  console.log("cancel");
+}
 </script>
 
 <template>
@@ -17,7 +23,12 @@ const buttonRef = ref(null);
   >
     <!-- Tooltip content can be empty or have default slot content -->
   </HTooltip>
-  <HButton ref="buttonRef">Click me</HButton>
+  <HButton ref="buttonRef">tooltip</HButton>
+
+  <!-- 使用自己的Popconfirm组件 -->
+  <HPopconfirm title="确定删除吗？" @confirm="popConfirm" @cancel="popCancel">
+    <HButton type="primary" size="small"> popconfirm </HButton>
+  </HPopconfirm>
 </template>
 
 <style scoped></style>

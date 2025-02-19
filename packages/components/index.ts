@@ -10,3 +10,6 @@ export * from "./Alert";
 
 //导出Tooltip组件
 export * from "./Tooltip";
+
+//导出Popconfirm组件
+export * from "./Popconfirm";

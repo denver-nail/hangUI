@@ -6,6 +6,7 @@ import {
   throwError,
   withInstall,
   makeInstaller,
+  addUnit,
 } from "../index"; // 根据你的文件路径引入
 import { each } from "lodash-es";
 
@@ -18,6 +19,9 @@ describe("utils/index", () => {
   });
   it("withInstall should be exported", () => {
     expect(withInstall).toBeDefined();
+  });
+  it("addUnit should be exported", () => {
+    expect(addUnit).toBeDefined();
   });
   it("makeInstaller should be exported", () => {
     expect(makeInstaller).toBeDefined();

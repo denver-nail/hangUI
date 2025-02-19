@@ -10,3 +10,5 @@ export const typeIconMap = new Map([
 export * from "./install";
 //导出error.ts 所有方法
 export * from "./error";
+//导出style.ts 所有方法
+export * from "./style";
