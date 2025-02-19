@@ -7,3 +7,6 @@ export * from "./Icon";
 export * from "./Collapse";
 //导出Alert组件
 export * from "./Alert";
+
+//导出Tooltip组件
+export * from "./Tooltip";

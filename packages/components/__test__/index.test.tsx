@@ -7,6 +7,7 @@ import {
   HAlert,
   HCollapse,
   HCollapseItem,
+  HTooltip,
 } from "../index.ts";
 import { get, map } from "lodash-es";
 const comps = [
@@ -16,6 +17,7 @@ const comps = [
   HCollapse,
   HCollapseItem,
   HIcon,
+  HTooltip,
 ] as Plugin[];
 describe("component/index", () => {
   it.each(map(comps, (c) => [get(c, "name") ?? "", c]))(

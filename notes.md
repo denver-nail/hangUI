@@ -1923,3 +1923,15 @@ PS D:\Codes\前端学习\18-elemetplus-clone\hangUI\packages\docs> pnpm vitepres
 2. 检查workflow的yml的配置
 
 ![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-18_16-16-40.png)
+
+## 编写Tooltip组件
+
+**二次封装Popover实现**
+
+执行命令：
+
+```
+PS D:\Codes\前端学习\18-elemetplus-clone\hangUI> pnpm add @popperjs/core -wD
+```
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-19_14-15-49.png)
