@@ -1935,3 +1935,9 @@ PS D:\Codes\前端学习\18-elemetplus-clone\hangUI> pnpm add @popperjs/core -wD
 ```
 
 ![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-19_14-15-49.png)
+
+## 对hooks目录下的文件进行测试
+
+> 作者将hooks单独打包了，我并没有做这一个操作,同时作者将hooksPlugin和重写vitepress的相关内容都放在lib文件夹下并打包了，我并没有这么做。
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-19_15-00-04.png)

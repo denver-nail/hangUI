@@ -11,7 +11,8 @@
     "docs:preview": "pnpm --filter @hangui/docs preview",
     "test-comp": "cross-env NODE_ENV=test pnpm --filter @hangui/components test",
     "test-utils": "cross-env NODE_ENV=test pnpm --filter @hangui/utils test",
-    "test": "run-p test-utils test-comp",
+    "test-hooks": "cross-env NODE_ENV=test pnpm --filter @hangui/hooks test",
+    "test": "run-p test-utils test-hooks test-comp",
     "build": "cross-env NODE_ENV=production pnpm --filter @purple-liu/hangui build",
     "build:dev": "cross-env NODE_ENV=development pnpm --filter @purple-liu/hangui build:watch"
   },
