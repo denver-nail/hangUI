@@ -13,3 +13,5 @@ export * from "./Tooltip";
 
 //导出Popconfirm组件
 export * from "./Popconfirm";
+
+export * from "./Dropdown";
