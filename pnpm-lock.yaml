@@ -20,6 +20,9 @@ importers:
       '@hangui/hooks':
         specifier: workspace:*
         version: link:packages/hooks
+      '@hangui/locale':
+        specifier: workspace:*
+        version: link:packages/locale
       '@hangui/theme':
         specifier: workspace:*
         version: link:packages/theme
@@ -111,6 +114,9 @@ importers:
       vue-tsc:
         specifier: ^1.8.27
         version: 1.8.27(typescript@5.6.3)
+      vue3-i18n:
+        specifier: ^1.1.5
+        version: 1.1.5(vue@3.5.13)
 
   packages/components: {}
 
@@ -158,6 +164,8 @@ importers:
         version: 1.0.0-rc.44(@algolia/client-search@5.19.0)(@types/node@20.17.14)(async-validator@4.2.5)(postcss@8.5.1)(search-insights@2.17.3)(typescript@5.6.3)
 
   packages/hooks: {}
+
+  packages/locale: {}
 
   packages/play:
     devDependencies:
@@ -7466,6 +7474,14 @@ packages:
       '@vue/language-core': 1.8.27(typescript@5.6.3)
       semver: 7.6.3
       typescript: 5.6.3
+    dev: true
+
+  /vue3-i18n@1.1.5(vue@3.5.13):
+    resolution: {integrity: sha512-DN5XfE0z6BnFxjbP/qW8AKI5QCex97L2l8z7G76ccTkfTsJ18n4mXGCy4K9H2rm4FlzDx/USPlPqQK64yXQqDg==}
+    peerDependencies:
+      vue: ^3.0.0
+    dependencies:
+      vue: 3.5.13(typescript@5.6.3)
     dev: true
 
   /vue@3.5.13(typescript@5.6.3):

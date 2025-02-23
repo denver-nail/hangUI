@@ -5,7 +5,6 @@ import {
   debugWarn,
   throwError,
   withInstall,
-  makeInstaller,
   addUnit,
 } from "../index"; // 根据你的文件路径引入
 import { each } from "lodash-es";
@@ -23,9 +22,7 @@ describe("utils/index", () => {
   it("addUnit should be exported", () => {
     expect(addUnit).toBeDefined();
   });
-  it("makeInstaller should be exported", () => {
-    expect(makeInstaller).toBeDefined();
-  });
+
   it("typeIconMap should be worked", () => {
     expect(typeIconMap).toBeDefined();
     each(

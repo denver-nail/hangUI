@@ -1949,3 +1949,330 @@ PS D:\Codes\前端学习\18-elemetplus-clone\hangUI> pnpm add @popperjs/core -wD
 ## 编写Dropdown组件
 
 ![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-23_09-25-19.png)
+
+## 国际化
+
+### 1）安装相关包
+
+```
+PS D:\Codes\前端学习\18-elemetplus-clone\hangUI> pnpm add vue3-i18n -Dw
+```
+
+### 2）新建locale文件夹并进行pnpm初始化
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-23_09-35-12.png)
+
+### 3）修改根目录的package.json,随后执行`pnpm i`
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-23_09-36-28.png)
+
+```
+PS D:\Codes\前端学习\18-elemetplus-clone\hangUI> pnpm i
+```
+
+### 4)模仿element-plus编写语言类型和配置内容，并在core中导出。
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-23_09-55-29.png)
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-23_16-01-00.png)
+
+### 5）自定义的 `useLocale` 钩子函数
+
+用于处理国际化（i18n）的逻辑。它可以根据传入的语言配置（`localeOverrides`）动态创建或获取国际化实例，并返回一个经过处理的国际化对象。
+
+**packages\hooks\useLocale.ts**
+
+```ts
+import { inject, type Ref } from "vue";
+import { omit } from "lodash-es";
+import { createI18n, i18nSymbol, type I18nInstance } from "vue3-i18n";
+import type { Language } from "@hangui/locale";
+import English from "@hangui/locale/lang/en";
+/**
+ *useLocale 钩子用于动态获取或创建国际化实例，支持传入自定义语言配置。
+ * @param localeOverrides  
+如果没有传入 localeOverrides，则尝试从上下文中获取现有的国际化实例；如果没有，则创建一个新的实例，默认使用英文。
+如果传入了 localeOverrides，则创建一个新的国际化实例，加载英文和传入的语言包。
+ * @returns 返回一个剔除 install 属性的国际化实例，避免重复安装。
+ */
+//该钩子与usei18n的区别在于：可以传入一个非顶层注入的语言取出其t函数
+export function useLocale(localeOverrides?: Ref<Language>) {
+  //如果没有传入 localeOverrides，它会尝试从上下文中获取现有的国际化实例。如果没有的话，它会创建一个新的国际化实例，并使用 English 作为默认语言。
+  if (!localeOverrides) {
+    return omit(
+      <I18nInstance>(
+        inject(
+          i18nSymbol,
+          createI18n({ locale: English.name, messages: { en: English.el } })
+        )
+      ),
+      //避免重复安装
+      "install"
+    );
+  }
+  return omit(
+    createI18n({
+      locale: localeOverrides.value.name,
+      messages: {
+        en: English.el,
+        [localeOverrides.value.name]: localeOverrides.value.el,
+      },
+    }),
+    "install"
+  );
+}
+export default useLocale;
+```
+
+### 6）编写ConfigProvider组件
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-23_15-19-20.png)
+
+**packages\components\ConfigProvider\hooks.ts**
+
+```ts
+import { ref, getCurrentInstance, inject, computed, provide, unref } from "vue";
+import type { MaybeRef, Ref, App } from "vue";
+import { createI18n, i18nSymbol } from "vue3-i18n";
+import type { TranslatePair } from "@hangui/locale";
+import English from "@hangui/locale/lang/en";
+import { merge } from "lodash-es";
+import { debugWarn } from "@hangui/utils";
+import {
+  configProviderContextKey,
+  type ConfigProviderContext,
+} from "./constants";
+
+const globalConfig = ref<ConfigProviderContext>();
+/**
+ * 在组件中访问全局配置（ConfigProviderContext）。通过该钩子，你可以获取全局配置的某一项值，或者整个配置对象。
+ * @param key
+ * @param defaultVal
+ */
+/* 这里使用了 函数重载，使得 useGlobalConfig 可以有两种不同的调用方式：
+1.传入 key 和 defaultVal：当你传入一个配置项的 key（键）时，返回该配置项的值，类型为 Ref<ConfigProviderContext[K]>。如果该配置项不存在，则返回 defaultVal。
+2.不传入 key：如果你不传入 key，则返回整个 ConfigProviderContext 对象 */
+export function useGlobalConfig<
+  K extends keyof ConfigProviderContext,
+  D extends ConfigProviderContext[K]
+>(key: K, defaultVal?: D): Ref<Exclude<ConfigProviderContext[K], void>>;
+export function useGlobalConfig(): Ref<ConfigProviderContext>;
+export function useGlobalConfig(
+  key?: keyof ConfigProviderContext,
+  defaultValue = void 0
+) {
+  /* 
+  getCurrentInstance() 是 Vue 3 的一个 API，用来获取当前组件实例。如果当前存在组件实例（即在组件内部使用这个钩子），那么通过 inject 从父级组件或全局配置中注入 configProviderContextKey（假设是一个 Symbol 或常量，表示全局配置的键）。globalConfig 会作为默认值提供给 inject。
+  如果没有组件实例（即在外部或者没有父级配置），则直接使用本地的 globalConfig。
+ */
+  const config = getCurrentInstance()
+    ? inject(configProviderContextKey, globalConfig)
+    : globalConfig;
+  /* 
+  getCurrentInstance() 是 Vue 3 的一个 API，用来获取当前组件实例。如果当前存在组件实例（即在组件内部使用这个钩子），那么通过 inject 从父级组件或全局配置中注入 configProviderContextKey（假设是一个 Symbol 或常量，表示全局配置的键）。globalConfig 会作为默认值提供给 inject。
+  如果没有组件实例（即在外部或者没有父级配置），则直接使用本地的 globalConfig。 */
+  return key ? computed(() => config.value?.[key] ?? defaultValue) : config;
+}
+
+/* 笔记：
+1）
+<K extends keyof ConfigProviderContext, D extends ConfigProviderContext[K]>
+K 是一个泛型类型，代表 ConfigProviderContext 对象中的 键，通过 keyof ConfigProviderContext 限制了 K 只能是 ConfigProviderContext 类型的键之一。
+D 是另一个泛型类型，表示该键 K 对应的 值的类型，它的类型通过 ConfigProviderContext[K] 确定，即 K 对应的字段值的类型。
+这使得 useGlobalConfig 函数能够根据传入的 key 参数推导出正确的类型，而无需在调用时手动指定。
+
+2）
+useGlobalConfig 函数签名中的 Ref<Exclude<ConfigProviderContext[K], void>> 就涉及了条件类型和类型排除（Exclude）。
+ConfigProviderContext[K]：根据传入的 K，获取 ConfigProviderContext 中键 K 对应的类型。
+Exclude<T, U>：是 TypeScript 中的条件类型，用来从类型 T 中排除掉 U 类型。具体来说，Exclude<ConfigProviderContext[K], void> 是指排除 void 类型，确保如果配置项值是 undefined 或 void，就不被包含在返回类型中。
+这个条件类型的应用确保了返回的值类型不包括 void，即如果配置项不存在或者为 undefined，类型系统会将其排除，保证返回类型不会是 void。
+*/
+//私有方法
+// 创建一个 I18n 实例的函数，接受一个可选的配置对象 `opts`。
+const _createI18n = (opts?: ConfigProviderContext) => {
+  // 定义一个 `mergeMessage` 函数，用于合并消息对象。
+  // 它将传入的 `msg` 和 `opts.extendsI18nMsg` 合并，`opts.extendsI18nMsg` 默认是空对象。
+  const mergeMessage = (msg: TranslatePair) =>
+    merge(msg, opts?.extendsI18nMsg ?? {}); // 合并 `msg` 和扩展的国际化消息。
+
+  // 如果 `opts` 中没有指定 `locale`，则使用默认的英文（"en"）配置。
+  if (!opts?.locale) {
+    return createI18n({
+      locale: "en", // 默认语言设为英语
+      messages: {
+        en: English.el, // 英文语言包，来自 `English.el`
+      },
+    });
+  }
+
+  // 如果 `opts` 中指定了 `locale`，则根据传入的 `locale` 创建对应的国际化配置。
+  return createI18n({
+    // 使用 `opts.locale.name` 作为语言名称，如果没有指定，则使用默认的英文（"en"）。
+    locale: opts.locale?.name || "en",
+
+    // 合并语言包消息：默认的英文语言包与传入的 `locale` 对应的语言包
+    messages: mergeMessage({
+      en: English.el, // 默认的英文消息
+      [opts.locale?.name]: opts.locale?.el ?? {}, // 合并传入的语言包，如果没有则使用空对象
+    }),
+  });
+};
+
+export function provideGlobalConfig(
+  config: MaybeRef<ConfigProviderContext> = { locale: English },
+  app?: App,
+  global = false
+) {
+  const instance = getCurrentInstance();
+  const oldCfg = instance ? useGlobalConfig() : void 0;
+  const provideFn = app?.provide ?? (instance ? provide : void 0);
+  if (!provideFn) {
+    debugWarn(
+      "provideGlobalConfig",
+      "provideGlobalConfig() can only be used inside setup()"
+    );
+    return;
+  }
+  const context = computed(() => {
+    const cfg = unref(config);
+    if (!oldCfg?.value) return cfg;
+    return merge(oldCfg.value, cfg);
+  });
+  const i18n = computed(() => _createI18n(context.value));
+  provideFn(configProviderContextKey, context);
+  provideFn(i18nSymbol, i18n.value);
+  if (app) app.use(i18n.value);
+  if (global || !globalConfig.value) {
+    globalConfig.value = context.value;
+  }
+  return context;
+}
+
+```
+
+**packages\components\ConfigProvider\types.ts**
+
+```ts
+import type { Language, TranslatePair } from "@hangui/locale";
+export interface ConfigProviderProps {
+  locale?: Language;
+  extendsI18nMsg?: TranslatePair;
+}
+
+```
+
+**packages\components\ConfigProvider\constants.ts**
+
+```
+import type { ConfigProviderProps } from "./types";
+import type { InjectionKey, Ref } from "vue";
+
+export type ConfigProviderContext = Partial<ConfigProviderProps>;
+
+export const configProviderContextKey: InjectionKey<
+  Ref<ConfigProviderContext>
+> = Symbol();
+
+```
+
+**packages\components\ConfigProvider\ConfigProvider.vue**
+
+```vue
+<script setup lang="ts">
+import type { ConfigProviderProps } from "./types";
+import { provideGlobalConfig } from "./hooks";
+defineOptions({
+  name: "HConfigProvider",
+});
+const props = defineProps<ConfigProviderProps>();
+const config = provideGlobalConfig(props);
+</script>
+<template>
+  <slot name="default" :config="config"></slot>
+</template>
+<style scoped></style>
+
+```
+
+### **7)改造makeInstall函数**
+
+移动makeInstall函数**并更改原本使用时的导入**：packages\utils\install.ts--->packages\core\makeInstaller.ts
+
+**packages\core\makeInstaller.ts**
+
+```ts
+import type { App, Plugin } from "vue";
+import { each } from "lodash-es";
+import {
+  provideGlobalConfig,
+  type ConfigProviderProps,
+} from "@hangui/components";
+//makeInstaller 函数接受一个组件数组 components（这些组件需要是 Vue 插件类型），并返回一个 installer 函数。installer 函数会将这些组件逐个通过 app.use() 安装到 Vue 应用中。
+export function makeInstaller(components: Plugin[]) {
+  const installer = (app: App, opts?: ConfigProviderProps) => {
+    each(components, (c) => app.use(c));
+    if (opts) provideGlobalConfig(opts, app, true);
+  };
+  return installer as Plugin;
+}
+
+```
+
+### **8）打包**
+
+**packages\core\index.ts**
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-23_16-15-43.png)
+
+**tsconfig.build.json**
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-23_16-14-52.png)
+
+### 9)使用
+
+1.给组件库中的特定组件实现国际化，以Popconfirm组件为例：
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-23_15-55-45.png)
+
+2.使用该组件
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-23_16-18-25.png)
+
+**packages\play\src\App.vue**
+
+```vue
+<script setup lang="ts">
+import { computed, ref } from "vue";
+import { ja, ko, en, zhCn, zhTw, HConfigProvider } from "@purple-liu/hangui";
+import { get } from "lodash-es";
+
+const language = ref("");
+const langMap = {
+  ja,
+  ko,
+  en,
+  zhCn,
+  zhTw,
+} as const;
+const locale = computed(() => get(langMap, language.value));
+const changelang = () => {
+  const l = ["zhCn", "zhTw", "ko", "en", "ja"];
+  language.value = l[(l.indexOf(language.value) + 1) % l.length];
+};
+</script>
+
+<template>
+    <h-config-provider :locale="locale">
+    <h-popconfirm
+      title="确定删除吗？"
+      @confirm="popConfirm"
+      @cancel="popCancel"
+    >
+      <h-button type="primary" size="small"> popconfirm </h-button>
+    </h-popconfirm>
+  </h-config-provider>
+
+</template>
+
+```
+

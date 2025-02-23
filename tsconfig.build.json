@@ -25,7 +25,8 @@
     "types": ["node"],
     "baseUrl": "./",
     "paths": {
-      "@hangui/components": ["./packages/components"]
+      "@hangui/components": ["./packages/components"],
+      "@hangui/locale": ["./packages/locale"]
     }
   },
   "include": [
@@ -33,6 +34,7 @@
     "packages/core/index.ts",
     "packages/hooks/**/*.ts",
     "packages/utils/**/*.ts",
-    "packages/components/**/*.ts"
+    "packages/components/**/*.ts",
+    "packages/locale/**/*.ts"
   ]
 }

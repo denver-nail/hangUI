@@ -6,6 +6,7 @@ import { addUnit } from "@hangui/utils";
 import HButton from "../Button/Button.vue";
 import HTooltip from "../Tooltip/Tooltip.vue";
 import HIcon from "../Icon/Icon.vue";
+import { useLocale } from "@hangui/hooks";
 defineOptions({
   name: "HPopconfirm",
 });
@@ -36,6 +37,8 @@ function cancel(e: MouseEvent) {
   emits("cancel", e);
   hidePopper();
 }
+//国际化
+const { t } = useLocale();
 </script>
 <template>
   <h-tooltip ref="tooltipRef" trigger="click" :hide-timeout="hideAfter">
@@ -53,7 +56,7 @@ function cancel(e: MouseEvent) {
             :type="cancelButtonType"
             @click="cancel"
           >
-            {{ cancelButtonText || "no" }}
+            {{ cancelButtonText || t("popconfirm.cancelButtonText") }}
           </h-button>
           <h-button
             class="er-popconfirm__confirm"
@@ -61,7 +64,7 @@ function cancel(e: MouseEvent) {
             :type="confirmButtonType"
             @click="confirm"
           >
-            {{ confirmButtonText || "yes" }}
+            {{ confirmButtonText || t("popconfirm.confirmButtonText") }}
           </h-button>
         </div>
       </div>

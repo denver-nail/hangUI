@@ -41,7 +41,8 @@
     "vite": "^5.1.4",
     "vitepress": "1.0.0-rc.44",
     "vitest": "^1.4.0",
-    "vue-tsc": "^1.8.27"
+    "vue-tsc": "^1.8.27",
+    "vue3-i18n": "^1.1.5"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
@@ -50,11 +51,12 @@
     "@hangui/hooks": "workspace:*",
     "@hangui/theme": "workspace:*",
     "@hangui/utils": "workspace:*",
+    "@hangui/locale": "workspace:*",
     "@purple-liu/hangui": "workspace:*",
-    "lodash-es": "^4.17.21",
     "@vitest/coverage-v8": "^1.4.0",
     "@vue/test-utils": "^2.4.5",
     "jsdom": "^24.0.0",
+    "lodash-es": "^4.17.21",
     "vue": "^3.4.19"
   }
 }
