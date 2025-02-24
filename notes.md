@@ -2331,3 +2331,68 @@ const open5 = () => {
 
 ```
 
+## 编写Notification组件
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-24_19-38-37.png)
+
+**packages\play\src\App.vue**
+
+```vue
+<script setup lang="ts">
+import { computed, ref, h } from "vue";
+import {
+  HNotification,
+} from "@purple-liu/hangui";
+import { get } from "lodash-es";
+function openNotify1() {
+  HNotification({
+    title: "Title",
+    message: h("i", { style: "color:teal" }, "This is a remider"),
+    position: "bottom-right",
+  });
+}
+function openNotify2() {
+  HNotification({
+    title: "Prompt",
+    message: "This is a message that does not auto close",
+    duration: 0,
+    position: "top-left",
+    type: "danger",
+  });
+}
+function openNotify3() {
+  HNotification({
+    title: "Prompt",
+    message: "This is a message that does not auto close",
+    duration: 0,
+    position: "top-right",
+    type: "danger",
+  });
+}
+</script>
+
+<template>
+  <!-- 使用自己的notification组件 -->
+  <div>
+    <h1>notification组件</h1>
+    <h-button :plain="true" @click="openNotify1">自动关闭</h-button>
+    <h-button :plain="true" @click="openNotify2">不自动关闭</h-button>
+    <!-- 不同方向的notification组件 -->
+    <h-button :plain="true" @click="openNotify3">其他方向</h-button>
+
+    <h-button
+      :plain="true"
+      @click="
+        $notify.danger({
+          title: 'Prompt',
+          message: 'This is a message that does not auto close',
+        })
+      "
+      >全局调用</h-button
+    >
+  </div>
+</template>
+
+
+```
+

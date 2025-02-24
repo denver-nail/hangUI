@@ -30,6 +30,7 @@ const { topOffset, bottomOffset } = useOffset({
 });
 const customStyle = computed(() => ({
   top: addUnit(topOffset.value),
+  zIndex: props.zIndex,
 }));
 //计时器
 let timer: number;

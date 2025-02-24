@@ -9,6 +9,7 @@ import {
   zhTw,
   HConfigProvider,
   HMessage,
+  HNotification,
 } from "@purple-liu/hangui";
 import { get } from "lodash-es";
 
@@ -69,67 +70,127 @@ const open4 = () => {
 const open5 = () => {
   HMessage.success("Congrats, this is a success message.");
 };
+function openNotify1() {
+  HNotification({
+    title: "Title",
+    message: h("i", { style: "color:teal" }, "This is a remider"),
+    position: "bottom-right",
+  });
+}
+
+function openNotify2() {
+  HNotification({
+    title: "Prompt",
+    message: "This is a message that does not auto close",
+    duration: 0,
+    position: "top-left",
+    type: "danger",
+  });
+}
+function openNotify3() {
+  HNotification({
+    title: "Prompt",
+    message: "This is a message that does not auto close",
+    duration: 0,
+    position: "top-right",
+    type: "danger",
+  });
+}
 </script>
 
 <template>
-  <h-config-provider :locale="locale">
-    <h-popconfirm
-      title="确定删除吗？"
-      @confirm="popConfirm"
-      @cancel="popCancel"
-    >
-      <h-button type="primary" size="small"> popconfirm </h-button>
-    </h-popconfirm>
-  </h-config-provider>
   <!-- 使用自己的按钮组件 -->
-  <h-button type="primary" size="small"> test </h-button>
+  <div>
+    <h1>Button</h1>
+    <h-button type="primary" size="small"> test </h-button>
+  </div>
+  <hr />
   <!-- 使用自己的tooltip组件 -->
-  <h-tooltip
-    :virtualTriggering="true"
-    :virtualRef="buttonRef"
-    content="This is a tooltip"
-    trigger="click"
-  >
-    <!-- Tooltip content can be empty or have default slot content -->
-  </h-tooltip>
-  <h-button ref="buttonRef">tooltip</h-button>
-  <!-- 使用自己的Popconfirm组件 -->
-  <h-button @click="changelang" type="info" style="margin-right: 20px"
-    >change language</h-button
-  >
-  <!-- 使用自己的dropdown组件 -->
-  <div class="row">
-    <div class="col">
-      <div class="desc">disabled</div>
-      <h-dropdown :items="items" disabled>
-        <span class="dropdown-link">
-          Dropdown List
-          <h-icon icon="angle-down" />
-        </span>
-      </h-dropdown>
-    </div>
-    <div class="col">
-      <div class="desc">undisabled</div>
-      <h-dropdown :items="items">
-        <span class="dropdown-link">
-          Dropdown List
-          <h-icon icon="angle-down" />
-        </span>
-      </h-dropdown>
-    </div>
+  <div>
+    <h1>Tooltip</h1>
+    <h-button ref="buttonRef">tooltip</h-button>
   </div>
 
-  <!-- 使用自己的message组件 -->
-  <h-button :plain="true" @click="open1">Message</h-button>
-  <h-button :plain="true" @click="open2">Success</h-button>
-  <h-button :plain="true" @click="open3">Warning</h-button>
-  <h-button :plain="true" @click="open4">Error</h-button>
+  <hr />
+  <div>
+    <h1>Popcomfirm</h1>
+    <h-button @click="changelang" type="info" style="margin-right: 20px"
+      >change language</h-button
+    >
+    <h-config-provider :locale="locale">
+      <h-popconfirm
+        title="确定删除吗？"
+        @confirm="popConfirm"
+        @cancel="popCancel"
+      >
+        <h-button type="primary" size="small"> popconfirm </h-button>
+      </h-popconfirm>
+    </h-config-provider>
+  </div>
+  <!-- 使用自己的Popconfirm组件 -->
 
-  <h-button @click="open1">插件式调用</h-button>
-  <h-button @click="open5">函数式调用</h-button>
-  <h-button @click="$message.success('Congrats, this is a success message.')"
-    >全局方法调用</h-button
-  >
+  <hr />
+  <div>
+    <h1>Dropdown</h1>
+    <div class="row">
+      <div class="col">
+        <div class="desc">disabled</div>
+        <h-dropdown :items="items" disabled>
+          <span class="dropdown-link">
+            Dropdown List
+            <h-icon icon="angle-down" />
+          </span>
+        </h-dropdown>
+      </div>
+      <div class="col">
+        <div class="desc">undisabled</div>
+        <h-dropdown :items="items">
+          <span class="dropdown-link">
+            Dropdown List
+            <h-icon icon="angle-down" />
+          </span>
+        </h-dropdown>
+      </div>
+    </div>
+  </div>
+  <!-- 使用自己的dropdown组件 -->
+
+  <hr />
+  <!-- 使用自己的message组件 -->
+  <div>
+    <h1>Message</h1>
+    <h-button :plain="true" @click="open1">Message</h-button>
+    <h-button :plain="true" @click="open2">Success</h-button>
+    <h-button :plain="true" @click="open3">Warning</h-button>
+    <h-button :plain="true" @click="open4">Error</h-button>
+
+    <h-button @click="open1">插件式调用</h-button>
+    <h-button @click="open5">函数式调用</h-button>
+    <h-button @click="$message.danger('Congrats, this is a success message.')"
+      >全局方法调用</h-button
+    >
+  </div>
+
+  <hr />
+  <!-- 使用自己的notification组件 -->
+  <div>
+    <h1>notification组件</h1>
+    <h-button :plain="true" @click="openNotify1">自动关闭</h-button>
+    <h-button :plain="true" @click="openNotify2">不自动关闭</h-button>
+    <!-- 不同方向的notification组件 -->
+    <h-button :plain="true" @click="openNotify3">其他方向</h-button>
+
+    <h-button
+      :plain="true"
+      @click="
+        $notify.danger({
+          title: 'Prompt',
+          message: 'This is a message that does not auto close',
+        })
+      "
+      >全局调用</h-button
+    >
+  </div>
 </template>
 
 <style scoped>
