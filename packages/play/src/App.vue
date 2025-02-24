@@ -1,7 +1,15 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, h } from "vue";
 import type { DropdownItemProps } from "@purple-liu/hangui";
-import { ja, ko, en, zhCn, zhTw, HConfigProvider } from "@purple-liu/hangui";
+import {
+  ja,
+  ko,
+  en,
+  zhCn,
+  zhTw,
+  HConfigProvider,
+  HMessage,
+} from "@purple-liu/hangui";
 import { get } from "lodash-es";
 
 const language = ref("");
@@ -30,6 +38,37 @@ const items: DropdownItemProps[] = [
   { command: "3", label: "Action 3", disabled: true },
   { command: "4", label: "Action 4", disabled: true },
 ];
+
+const open1 = () => {
+  HMessage({
+    showClose: true,
+    message: "This is a message.",
+  });
+};
+const open2 = () => {
+  HMessage({
+    showClose: true,
+    message: "Congrats, this is a success message.",
+    type: "success",
+  });
+};
+const open3 = () => {
+  HMessage({
+    showClose: true,
+    message: "Warning, this is a warning message.",
+    type: "warning",
+  });
+};
+const open4 = () => {
+  HMessage({
+    showClose: true,
+    message: "Oops, this is a error message.",
+    type: "danger",
+  });
+};
+const open5 = () => {
+  HMessage.success("Congrats, this is a success message.");
+};
 </script>
 
 <template>
@@ -44,7 +83,6 @@ const items: DropdownItemProps[] = [
   </h-config-provider>
   <!-- 使用自己的按钮组件 -->
   <h-button type="primary" size="small"> test </h-button>
-
   <!-- 使用自己的tooltip组件 -->
   <h-tooltip
     :virtualTriggering="true"
@@ -55,12 +93,10 @@ const items: DropdownItemProps[] = [
     <!-- Tooltip content can be empty or have default slot content -->
   </h-tooltip>
   <h-button ref="buttonRef">tooltip</h-button>
-
   <!-- 使用自己的Popconfirm组件 -->
   <h-button @click="changelang" type="info" style="margin-right: 20px"
     >change language</h-button
   >
-
   <!-- 使用自己的dropdown组件 -->
   <div class="row">
     <div class="col">
@@ -82,6 +118,18 @@ const items: DropdownItemProps[] = [
       </h-dropdown>
     </div>
   </div>
+
+  <!-- 使用自己的message组件 -->
+  <h-button :plain="true" @click="open1">Message</h-button>
+  <h-button :plain="true" @click="open2">Success</h-button>
+  <h-button :plain="true" @click="open3">Warning</h-button>
+  <h-button :plain="true" @click="open4">Error</h-button>
+
+  <h-button @click="open1">插件式调用</h-button>
+  <h-button @click="open5">函数式调用</h-button>
+  <h-button @click="$message.success('Congrats, this is a success message.')"
+    >全局方法调用</h-button
+  >
 </template>
 
 <style scoped>

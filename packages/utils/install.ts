@@ -12,3 +12,18 @@ export const withInstall = <T>(component: T) => {
   };
   return component as SFCWithInstall<T>;
 };
+/**
+ *  将一个函数包装成一个可安装的 Vue 插件。
+ * @param {T} fn - 要包装的函数。
+ * @param {string} name - 函数将在 Vue 应用的全局属性中使用的名称。
+ * @returns SFCWithInstall<T> - 包装后的函数，带有 install 方法，使其可以作为 Vue 插件使用。
+ */
+export const withinInstallFunction = <T>(fn: T, name: string) => {
+  // 为函数添加 install 方法，使其成为一个 Vue 插件
+  (fn as SFCWithInstall<T>).install = (app: App) => {
+    // 将函数挂载到 Vue 应用的全局属性上，以便在组件中可以通过 this 访问
+    app.config.globalProperties[name] = fn;
+  };
+  // 返回包装后的函数
+  return fn as SFCWithInstall<T>;
+};

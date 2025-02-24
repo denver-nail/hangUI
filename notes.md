@@ -2276,3 +2276,58 @@ const changelang = () => {
 
 ```
 
+## 编写Message组件
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-24_13-21-09.png)
+
+**packages\play\src\App.vue**
+
+```vue
+<script setup lang="ts">
+const open1 = () => {
+  HMessage({
+    showClose: true,
+    message: "This is a message.",
+  });
+};
+const open2 = () => {
+  HMessage({
+    showClose: true,
+    message: "Congrats, this is a success message.",
+    type: "success",
+  });
+};
+const open3 = () => {
+  HMessage({
+    showClose: true,
+    message: "Warning, this is a warning message.",
+    type: "warning",
+  });
+};
+const open4 = () => {
+  HMessage({
+    showClose: true,
+    message: "Oops, this is a error message.",
+    type: "danger",
+  });
+};
+const open5 = () => {
+  HMessage.success("Congrats, this is a success message.");
+};
+</script>
+
+<template>
+  <!-- 使用自己的message组件 -->
+  <h-button :plain="true" @click="open1">Message</h-button>
+  <h-button :plain="true" @click="open2">Success</h-button>
+  <h-button :plain="true" @click="open3">Warning</h-button>
+  <h-button :plain="true" @click="open4">Error</h-button>
+  <h-button @click="open1">插件式调用</h-button>
+  <h-button @click="open5">函数式调用</h-button>
+  <h-button @click="$message.success('Congrats, this is a success message.')"
+    >全局方法调用</h-button
+  >
+</template>
+
+```
+
