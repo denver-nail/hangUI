@@ -2392,6 +2392,33 @@ function openNotify3() {
     >
   </div>
 </template>
+```
+
+## 实现Input组件（未实现表单相关操作版）
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-26_20-37-18.png)
+
+**packages\play\src\App.vue**
+
+```vue
+<script setup lang="ts">
+import { computed, ref, h, reactive } from "vue";
+const form = reactive({
+  name: "",
+  desc: "",
+});
+
+
+</script>
+
+<template>
+    <!-- 使用自己的Input组件 -->
+  <div>
+    <h1>Input</h1>
+    <h-input v-model="form.name" show-password type="password" />
+    <h-input v-model="form.desc" type="textarea" />
+  </div>
+</template>
 
 
 ```

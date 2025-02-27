@@ -21,3 +21,5 @@ export * from "./ConfigProvider";
 export * from "./Message";
 
 export * from "./Notification";
+
+export * from "./Input";

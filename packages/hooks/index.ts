@@ -5,6 +5,7 @@ import useDisabledStyle from "./useDisableStyle";
 import useLocale from "./useLocale";
 import useOffset from "./useOffset";
 import useZIndex from "./useZIndex";
+import useFocusController from "./useFocusController";
 export {
   useClickOutside,
   useEventListener,
@@ -13,4 +14,5 @@ export {
   useLocale,
   useOffset,
   useZIndex,
+  useFocusController,
 };

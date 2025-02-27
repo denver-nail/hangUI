@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, h } from "vue";
+import { computed, ref, h, reactive } from "vue";
 import type { DropdownItemProps } from "@purple-liu/hangui";
 import {
   ja,
@@ -27,6 +27,10 @@ const changelang = () => {
   language.value = l[(l.indexOf(language.value) + 1) % l.length];
 };
 const buttonRef = ref(null);
+const form = reactive({
+  name: "",
+  desc: "",
+});
 function popConfirm() {
   console.log("confirm");
 }
@@ -190,6 +194,13 @@ function openNotify3() {
       "
       >全局调用</h-button
     >
+  </div>
+  <hr />
+  <!-- 使用自己的Input组件 -->
+  <div>
+    <h1>Input</h1>
+    <h-input v-model="form.name" show-password type="password" />
+    <h-input v-model="form.desc" type="textarea" />
   </div>
 </template>
 
