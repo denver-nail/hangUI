@@ -2423,3 +2423,43 @@ const form = reactive({
 
 ```
 
+## 实现MessageBox组件（函数式调用！项目难点1）
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-27_20-22-58.png)
+
+**packages\play\src\App.vue**
+
+```vue
+<script setup lang="ts">
+import {
+  HMessage,
+  HNotification,
+  HMessageBox,
+} from "@purple-liu/hangui";
+
+
+function openConfirm() {
+  HMessageBox.confirm(
+    "proxy will permanently delete the file. Continue?",
+    "Warning",
+    { type: "warning" }
+  )
+    .then((action: string) => {
+      HMessage.info(`action: ${action}`);
+    })
+    .catch((action: string) => {
+      HMessage.warning(`action: ${action}`);
+    });
+}
+</script>
+
+<template>
+  <!-- 使用自己的MessageBox组件 -->
+  <div>
+    <h1>MessageBox</h1>
+    <h-button @click="openConfirm" plain> Click to open the Confirm</h-button>
+  </div>
+</template>
+
+```
+

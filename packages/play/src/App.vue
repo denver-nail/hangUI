@@ -10,6 +10,7 @@ import {
   HConfigProvider,
   HMessage,
   HNotification,
+  HMessageBox,
 } from "@purple-liu/hangui";
 import { get } from "lodash-es";
 
@@ -99,6 +100,20 @@ function openNotify3() {
     position: "top-right",
     type: "danger",
   });
+}
+
+function openConfirm() {
+  HMessageBox.confirm(
+    "proxy will permanently delete the file. Continue?",
+    "Warning",
+    { type: "warning" }
+  )
+    .then((action: string) => {
+      HMessage.info(`action: ${action}`);
+    })
+    .catch((action: string) => {
+      HMessage.warning(`action: ${action}`);
+    });
 }
 </script>
 
@@ -201,6 +216,11 @@ function openNotify3() {
     <h1>Input</h1>
     <h-input v-model="form.name" show-password type="password" />
     <h-input v-model="form.desc" type="textarea" />
+  </div>
+  <!-- 使用自己的MessageBox组件 -->
+  <div>
+    <h1>MessageBox</h1>
+    <h-button @click="openConfirm" plain> Click to open the Confirm</h-button>
   </div>
 </template>
 
