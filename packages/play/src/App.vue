@@ -11,6 +11,7 @@ import {
   HMessage,
   HNotification,
   HMessageBox,
+  HLoading,
 } from "@purple-liu/hangui";
 import { get } from "lodash-es";
 
@@ -115,6 +116,17 @@ function openConfirm() {
       HMessage.warning(`action: ${action}`);
     });
 }
+function openLoading1() {
+  const _loading = HLoading.service({
+    lock: true,
+    spinner: "circle-notch",
+    text: "加载中...",
+    background: "rgba(255,255,255,0.5)",
+  });
+  setTimeout(() => {
+    _loading.close();
+  }, 2000);
+}
 </script>
 
 <template>
@@ -217,10 +229,17 @@ function openConfirm() {
     <h-input v-model="form.name" show-password type="password" />
     <h-input v-model="form.desc" type="textarea" />
   </div>
+  <hr />
   <!-- 使用自己的MessageBox组件 -->
   <div>
     <h1>MessageBox</h1>
     <h-button @click="openConfirm" plain> Click to open the Confirm</h-button>
+  </div>
+  <hr />
+  <!-- 使用自己的Loading组件 -->
+  <div>
+    <h1>Loading</h1>
+    <h-button type="primary" @click="openLoading1"> As a service </h-button>
   </div>
 </template>
 

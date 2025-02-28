@@ -2463,3 +2463,42 @@ function openConfirm() {
 
 ```
 
+## 实现Loading组件（指令式调用和函数式调用）
+
+### 实现Loading组件的函数式调用
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-28_10-55-24.png)
+
+
+
+```vue
+<script setup lang="ts">
+import { computed, ref, h, reactive } from "vue";
+import {
+  HLoading,
+} from "@purple-liu/hangui";
+function openLoading1() {
+  const _loading = HLoading.service({
+    lock: true,
+    spinner: "circle-notch",
+    text: "加载中...",
+    background: "rgba(255,255,255,0.5)",
+  });
+  setTimeout(() => {
+    _loading.close();
+  }, 2000);
+}
+</script>
+
+<template>
+
+  <!-- 使用自己的Loading组件 -->
+  <div>
+    <h1>Loading</h1>
+    <h-button type="primary" @click="openLoading1"> As a service </h-button>
+  </div>
+</template>
+
+
+```
+
