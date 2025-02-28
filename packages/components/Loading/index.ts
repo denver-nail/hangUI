@@ -1,19 +1,19 @@
 import { Loading } from "./service";
-
+import { vLoading } from "./directive";
 import type { App } from "vue";
 
 export const HLoading = {
   name: "HLoading",
   install(app: App) {
-    //TODO:
+    app.directive("loading", vLoading);
     app.config.globalProperties.$loading = Loading;
   },
-  //TODO:
+  directive: vLoading,
   service: Loading,
 };
 
 export default HLoading;
 
-export { Loading as HLoadingService };
+export { vLoading, vLoading as ErLoadingDirective, Loading as HLoadingService };
 
 export * from "./types";

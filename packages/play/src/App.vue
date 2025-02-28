@@ -127,6 +127,14 @@ function openLoading1() {
     _loading.close();
   }, 2000);
 }
+const loading = ref(false);
+
+function openLoading2() {
+  loading.value = true;
+  setTimeout(() => {
+    loading.value = false;
+  }, 2000);
+}
 </script>
 
 <template>
@@ -240,6 +248,14 @@ function openLoading1() {
   <div>
     <h1>Loading</h1>
     <h-button type="primary" @click="openLoading1"> As a service </h-button>
+    <h-button
+      v-loading.fullscreen.lock="loading"
+      er-loading-text="拼命加载中"
+      type="primary"
+      @click="openLoading2"
+    >
+      As a directive
+    </h-button>
   </div>
 </template>
 

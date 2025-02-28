@@ -2469,7 +2469,7 @@ function openConfirm() {
 
 ![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-28_10-55-24.png)
 
-
+**packages\play\src\App.vue**
 
 ```vue
 <script setup lang="ts">
@@ -2496,6 +2496,60 @@ function openLoading1() {
   <div>
     <h1>Loading</h1>
     <h-button type="primary" @click="openLoading1"> As a service </h-button>
+  </div>
+</template>
+
+
+```
+
+### 实现Loading组件的指令式调用
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-28_12-29-51.png)
+
+**packages\play\src\App.vue**
+
+```vue
+<script setup lang="ts">
+import { computed, ref, h, reactive } from "vue";
+import {
+  HMessageBox,
+  HLoading,
+} from "@purple-liu/hangui";
+
+function openLoading1() {
+  const _loading = HLoading.service({
+    lock: true,
+    spinner: "circle-notch",
+    text: "加载中...",
+    background: "rgba(255,255,255,0.5)",
+  });
+  setTimeout(() => {
+    _loading.close();
+  }, 2000);
+}
+const loading = ref(false);
+
+function openLoading2() {
+  loading.value = true;
+  setTimeout(() => {
+    loading.value = false;
+  }, 2000);
+}
+</script>
+
+<template>
+  <!-- 使用自己的Loading组件 -->
+  <div>
+    <h1>Loading</h1>
+    <h-button type="primary" @click="openLoading1"> As a service </h-button>
+    <h-button
+      v-loading.fullscreen.lock="loading"
+      er-loading-text="拼命加载中"
+      type="primary"
+      @click="openLoading2"
+    >
+      As a directive
+    </h-button>
   </div>
 </template>
 
