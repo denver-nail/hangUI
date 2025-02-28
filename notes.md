@@ -2553,6 +2553,35 @@ function openLoading2() {
   </div>
 </template>
 
+```
+
+## 实现Switch组件
+
+### 实现未兼容form组件的Switch组件
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-28_13-45-48.png)
+
+**packages\play\src\App.vue**
+
+```vue
+<script setup lang="ts">
+import { computed, ref, h, reactive } from "vue";
+const switchBtn = ref(false);
+</script>
+
+<template>
+  <!-- 使用自己的swith组件 -->
+  <div>
+    <h1>Switch</h1>
+    <p>switchBtn:{{ switchBtn }}</p>
+    <h-switch
+      v-model="switchBtn"
+      active-value="按月付费"
+      inactive-value="按年付费"
+      size="small"
+    />
+  </div>
+</template>
 
 ```
 

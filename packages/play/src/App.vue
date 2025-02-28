@@ -33,6 +33,7 @@ const form = reactive({
   name: "",
   desc: "",
 });
+
 function popConfirm() {
   console.log("confirm");
 }
@@ -135,6 +136,7 @@ function openLoading2() {
     loading.value = false;
   }, 2000);
 }
+const switchBtn = ref(false);
 </script>
 
 <template>
@@ -256,6 +258,18 @@ function openLoading2() {
     >
       As a directive
     </h-button>
+  </div>
+  <hr />
+  <!-- 使用自己的swith组件 -->
+  <div>
+    <h1>Switch</h1>
+    <p>switchBtn:{{ switchBtn }}</p>
+    <h-switch
+      v-model="switchBtn"
+      active-value="按月付费"
+      inactive-value="按年付费"
+      size="small"
+    />
   </div>
 </template>
 
