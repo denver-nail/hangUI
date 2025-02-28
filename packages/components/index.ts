@@ -26,3 +26,4 @@ export * from "./Input";
 export * from "./MessageBox";
 export * from "./Loading";
 export * from "./Switch";
+export * from "./Select";

@@ -6,4 +6,5 @@ import HangUI, { zhCn } from "@purple-liu/hangui";
 import "@purple-liu/hangui/dist/index.css";
 
 //使用use将组件以插件的方式添加到应用上
-createApp(App).use(HangUI, { locale: zhCn }).mount("#app");
+const app = createApp(App);
+app.use(HangUI, { locale: zhCn }).mount("#app");

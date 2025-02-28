@@ -23,7 +23,7 @@ interface UseFocusControllerOptions {
 }
 function useFocusController<T extends HTMLElement | { focus(): void }>(
   target: Ref<T | void>, // 需要控制焦点的目标元素引用
-  { afterFocus, beforeBlur, afterBlur }: UseFocusControllerOptions
+  { afterBlur, beforeBlur, afterFocus }: UseFocusControllerOptions = {}
 ) {
   // 组件实例相关
   const instance = getCurrentInstance()!;

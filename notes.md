@@ -2585,3 +2585,42 @@ const switchBtn = ref(false);
 
 ```
 
+## 实现Select组件
+
+### 实现未兼容form组件的Select组件
+
+![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-28_22-01-19.png)
+
+```vue
+<script setup lang="ts">
+import { computed, ref, h, reactive } from "vue";
+const options = ref([
+  { value: "beijing", label: "北京" },
+  { value: "shanghai", label: "上海" },
+  { value: "guangzhou", label: "广州", disabled: true },
+]);
+const optValue1 = ref("");
+const optValue2 = ref("");
+</script>
+
+<template>
+  <!-- 使用自己的select组件 -->
+  <div>
+    <h1>Select</h1>
+    <h-select
+      v-model="optValue1"
+      :options="options"
+      clearable
+      filterable
+    ></h-select>
+    <h-select v-model="optValue2">
+      <h-option value="beijing" label="op1" />
+      <h-option value="shanghai" label="op2" disabled />
+      <h-option value="guangzhou" label="op3" />
+    </h-select>
+  </div>
+</template>
+
+
+```
+

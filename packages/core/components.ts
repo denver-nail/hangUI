@@ -16,6 +16,8 @@ import {
   HMessageBox,
   HLoading,
   HSwitch,
+  HSelect,
+  HOption,
 } from "@hangui/components";
 import type { Plugin } from "vue";
 //将所有组件作为vue插件暴露给外部
@@ -36,4 +38,6 @@ export default [
   HMessageBox,
   HLoading,
   HSwitch,
+  HSelect,
+  HOption,
 ] as Plugin[];
