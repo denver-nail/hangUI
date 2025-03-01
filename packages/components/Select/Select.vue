@@ -21,7 +21,7 @@ import {
   type VNode,
   onMounted,
 } from "vue";
-import { useId, useFocusController, useClickOutside } from "@hangui/hooks";
+import { useFocusController, useClickOutside } from "@hangui/hooks";
 import { POPPER_OPTIONS, SELECT_CTX_KEY } from "./constants";
 import {
   each,
@@ -41,7 +41,7 @@ import {
 } from "lodash-es";
 
 import useKeyMap from "./useKeyMap";
-
+import { useFormItem, useFormDisabled, useFormItemInputId } from "../Form";
 import HOption from "./Option.vue";
 import HTooltip from "../Tooltip/Tooltip.vue";
 import HInput from "../Input/Input.vue";
@@ -88,8 +88,8 @@ const selectStates = reactive<SelectStates>({
 });
 
 // 计算属性：是否禁用
-const isDisabled = computed(() => props.disabled);
-
+const isDisabled = useFormDisabled();
+const { formItem } = useFormItem();
 // 计算属性：子选项
 const children = computed(
   () => filter(slots?.default?.(), (child) => eq(child.type, HOption)) // 过滤出类型为 HOption 的子组件
@@ -166,7 +166,7 @@ const filterPlaceholder = computed(
 const timeout = computed(() => (props.remote ? 300 : 100)); // 如果是远程搜索，防抖时间为 300ms，否则为 100ms
 const handleFilterDebounce = debounce(handleFilter, timeout.value); // 防抖处理过滤函数
 
-const inputId = useId().value; // 生成唯一的输入框 ID
+const { inputId } = useFormItemInputId(props, formItem); // 生成唯一的输入框 ID
 const {
   wrapperRef: inputWrapperRef,
   isFocused,
@@ -233,6 +233,8 @@ function handleClear() {
 
   emits("clear"); // 触发 clear 事件
   each(["change", "update:modelValue"], (k) => emits(k as any, "")); // 触发 change 和 update:modelValue 事件
+  //表单清空验证事件
+  formItem?.clearValidate();
 }
 
 function findOption(value: string) {
@@ -283,16 +285,18 @@ async function genFilterChilds(search: string) {
   if (props.filterMethod && isFunction(props.filterMethod)) {
     const opts = map(props.filterMethod(search), "value"); // 使用自定义过滤方法
     setFilteredChilds(
-      filter(childrenOptions.value, (item) =>
-        includes(opts, get(item, ["props", "value"])) // 过滤子选项
+      filter(
+        childrenOptions.value,
+        (item) => includes(opts, get(item, ["props", "value"])) // 过滤子选项
       )
     );
     return;
   }
 
   setFilteredChilds(
-    filter(childrenOptions.value, (item) =>
-      includes(get(item, ["props", "label"]), search) // 根据 label 过滤子选项
+    filter(
+      childrenOptions.value,
+      (item) => includes(get(item, ["props", "label"]), search) // 根据 label 过滤子选项
     )
   );
 }
@@ -309,8 +313,9 @@ async function genFilterOptions(search: string) {
     filteredOptions.value = props.filterMethod(search); // 使用自定义过滤方法
     return;
   }
-  filteredOptions.value = filter(props.options, (opt) =>
-    includes(opt.label, search) // 根据 label 过滤选项
+  filteredOptions.value = filter(
+    props.options,
+    (opt) => includes(opt.label, search) // 根据 label 过滤选项
   );
 }
 
@@ -359,8 +364,14 @@ watch(
 
 watch(
   () => props.modelValue,
-  () => {
-    // 表单校验 逻辑 change
+  (newVal, oldVal) => {
+    if (newVal !== oldVal) {
+      formItem?.validate("change").catch((err) => debugWarn(err));
+    }
+    if (newVal === "") {
+      (selectStates.inputValue = initialOption?.label ?? ""), // 输入框的值，默认为初始选项的 label
+        (selectStates.selectedOption = initialOption);
+    }
     setSelected();
   }
 );

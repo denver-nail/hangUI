@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from "vue";
-// import { debugWarn } from "@hangui/utils";
-import { useId } from "@hangui/hooks";
 import type { SwitchEmits, SwitchProps, SwitchInstance } from "./types";
+import { useFormDisabled, useFormItem, useFormItemInputId } from "../Form";
+import { debugWarn } from "@hangui/utils";
 defineOptions({
   name: "HSwitch",
   inheritAttrs: false,
@@ -12,13 +12,13 @@ const props = withDefaults(defineProps<SwitchProps>(), {
   inactiveValue: false,
 });
 const emits = defineEmits<SwitchEmits>();
-const isDisabled = computed(() => {
-  return props.disabled;
-});
+const isDisabled = useFormDisabled();
 const innerValue = ref(props.modelValue);
 const inputRef = ref<HTMLInputElement | null>(null);
 const checked = computed(() => innerValue.value === props.activeValue);
-const inputId = useId().value;
+const { formItem } = useFormItem();
+const { inputId } = useFormItemInputId(props, formItem);
+
 //切换状态的回调
 function handleChange() {
   if (isDisabled.value) return;
@@ -35,7 +35,8 @@ onMounted(() => {
 watch(checked, (val) => {
   // 同步更新input元素的checked状态
   inputRef.value!.checked = val;
-  //TODO:form校验逻辑
+  //form校验逻辑
+  formItem?.validate("change").catch((err) => debugWarn(err));
 });
 watch(
   () => props.modelValue,
@@ -71,6 +72,7 @@ defineExpose<SwitchInstance>({
       :disabled="isDisabled"
       :checked="checked"
       @keydown.enter="handleChange"
+      @blur="formItem?.validate('blur').catch((err) => debugWarn(err))"
     />
     <div class="er-switch__core">
       <div class="er-switch__core-inner">

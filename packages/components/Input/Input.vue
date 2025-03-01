@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, shallowRef, useAttrs, watch } from "vue";
 import type { InputEmits, InputInstance, InputProps } from "./types";
-import { useFocusController, useId } from "@hangui/hooks";
+import { useFocusController } from "@hangui/hooks";
 import HIcon from "../Icon/Icon.vue";
 import { each, noop } from "lodash-es";
-
+import { useFormDisabled, useFormItem, useFormItemInputId } from "../Form";
+import { debugWarn } from "@hangui/utils";
 defineOptions({
   name: "HInput",
   inheritAttrs: false,
@@ -20,8 +21,11 @@ const pwdVisible = ref(false);
 const inputRef = shallowRef<HTMLInputElement>();
 const textareaRef = shallowRef<HTMLTextAreaElement>();
 const _ref = computed(() => inputRef.value || textareaRef.value);
-//TODO:这里的disabled还收表单组件的控制，后续使用依赖注入来实现，表单组件控制disabled的优先级更高
-const isDisabled = computed(() => props.disabled);
+//使用Form组件提供的钩子获取表单项的上下文（input在表单中使用时将被表单项组件包裹）
+const { formItem } = useFormItem();
+//这里的disabled还收表单组件的控制，后续使用依赖注入来实现，表单组件控制disabled
+const isDisabled = useFormDisabled();
+const { inputId } = useFormItemInputId(props, formItem);
 //清空按钮显示控制
 
 const showClear = computed(
@@ -44,7 +48,8 @@ const { wrapperRef, isFocused, handleBlur, handleFocus } = useFocusController(
   _ref,
   {
     afterBlur() {
-      //TODO:失焦时：Form校验
+      //表单校验
+      formItem?.validate("blur").catch((err) => debugWarn(err));
     },
   }
 );
@@ -54,7 +59,8 @@ const clear: InputInstance["clear"] = function () {
     emits(event as any, "")
   );
   emits("clear");
-  //TODO:清空表单校验
+  //清空表单校验
+  formItem?.clearValidate();
 };
 const focus: InputInstance["focus"] = async function () {
   await nextTick();
@@ -80,7 +86,8 @@ watch(
   () => props.modelValue,
   (newVal) => {
     innerValue.value = newVal;
-    //TODO:表单校验
+    //表单校验
+    formItem?.validate("change").catch((err) => debugWarn(err));
   }
 );
 defineExpose<InputInstance>({
@@ -125,7 +132,7 @@ defineExpose<InputInstance>({
           :placeholder="placeholder"
           :autofocus="autofocus"
           :form="form"
-          :id="useId().value"
+          :id="inputId"
           v-model="innerValue"
           v-bind="attrs"
           @input="handleInput"
@@ -176,7 +183,7 @@ defineExpose<InputInstance>({
         :placeholder="placeholder"
         :autofocus="autofocus"
         :form="form"
-        :id="useId().value"
+        :id="inputId"
         v-model="innerValue"
         v-bind="attrs"
         @input="handleInput"

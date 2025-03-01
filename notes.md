@@ -43,21 +43,21 @@ pnpm create vite play --telmplate vue-ts
 
 ## 修改package.json
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-21_14-56-07.png)
+![](.\assert\Snipaste_2025-01-21_14-56-07.png)
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-21_14-56-14.png)
+![](.\assert\Snipaste_2025-01-21_14-56-14.png)
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-21_14-53-02.png)
+![](.\assert\Snipaste_2025-01-21_14-53-02.png)
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-21_14-52-56.png)
+![](.\assert\Snipaste_2025-01-21_14-52-56.png)
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-21_14-52-49.png)
+![](.\assert\Snipaste_2025-01-21_14-52-49.png)
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-21_14-52-41.png)
+![](.\assert\Snipaste_2025-01-21_14-52-41.png)
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-21_14-52-18.png)
+![](.\assert\Snipaste_2025-01-21_14-52-18.png)
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-21_15-20-43.png)
+![](.\assert\Snipaste_2025-01-21_15-20-43.png)
 
 ## 安装依赖和配置
 
@@ -103,7 +103,7 @@ pnpm add -w lodash-es@^4.17.21 vue@^3.4.19
 
 **向components文件夹添加依赖**
 
-PS D:\Codes\前端学习\18-elemetplus-clone\hangUI\packages\components>
+PS .\packages\components>
 
 ```
 pnpm add -D @vue/test-utils@^2.4.5 @vitest/coverage-v8@^1.4.0 jsdom@^24.0.0 --filter @hangui/components
@@ -116,7 +116,7 @@ pnpm add @popperjs/core@^2.11.8 async-validator@^4.2.5 --filter @hangui/componen
 
 core文件夹看作是components文件夹的唯一出口，所以core中只需导入：
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-21_15-38-18.png)
+![](.\assert\Snipaste_2025-01-21_15-38-18.png)
 
 ------
 
@@ -132,17 +132,17 @@ pnpm add -D vitepress@1.0.0-rc.44 --filter @hangui/docs
 
 1.修改package.json:删除一些全局已经安装的依赖
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-21_15-45-41.png)
+![](.\assert\Snipaste_2025-01-21_15-45-41.png)
 
 2.删除`packages\play\tsconfig.node.json`,`packages\play\tsconfig.json`和`packages\play\tsconfig.app.json`
 
 因为要**配置一个全局的tsconfig**，所以不需要现在这三个了。
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-21_15-54-02.png)
+![](.\assert\Snipaste_2025-01-21_15-54-02.png)
 
 **添加postcss全局配置**
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-21_15-58-10.png)
+![](.\assert\Snipaste_2025-01-21_15-58-10.png)
 
 **最后！！！！！！！！！！在根目录跑一次：**
 
@@ -302,11 +302,11 @@ createApp(App).use(HangUI).mount("#app");
 npx vitepress init
 ```
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-22_16-41-06.png)
+![](.\assert\Snipaste_2025-01-22_16-41-06.png)
 
 修改命令：
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-22_16-53-08.png)
+![](.\assert\Snipaste_2025-01-22_16-53-08.png)
 
 **在根目录执行命令**：
 
@@ -314,35 +314,35 @@ npx vitepress init
 npm run docs:dev
 ```
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-22_16-59-14.png)
+![](.\assert\Snipaste_2025-01-22_16-59-14.png)
 
 **给vitepress添加base配置**
 
 **packages\docs\.vitepress\config.mts**
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-22_17-00-44.png)
+![](.\assert\Snipaste_2025-01-22_17-00-44.png)
 
 ## 配置github相关
 
 生成一个新的token：选项全部勾选
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-22_17-16-37.png)
+![](.\assert\Snipaste_2025-01-22_17-16-37.png)
 
 将token配置到仓库中（需要与代码中的常量同名）
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-22_17-15-02.png)
+![](.\assert\Snipaste_2025-01-22_17-15-02.png)
 
 **.github\workflows\test-and-deploy.yaml**
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-22_17-17-14.png)
+![](.\assert\Snipaste_2025-01-22_17-17-14.png)
 
 **GitHub的actions的 初始状态**
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-22_17-22-36.png)
+![](.\assert\Snipaste_2025-01-22_17-22-36.png)
 
 **actions配置成功**
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-22_19-40-41.png)
+![](.\assert\Snipaste_2025-01-22_19-40-41.png)
 
 ## 使用nvm管理node版本
 
@@ -457,7 +457,7 @@ describe("Button.vue", () => {
 
 **编写进程（2）【编号对应git提交的描述内容与button组件相关的编号】**
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-23_22-08-29.png)
+![](.\assert\Snipaste_2025-01-23_22-08-29.png)
 
 ## 配置storybook
 
@@ -469,15 +469,15 @@ describe("Button.vue", () => {
 pnpm dlx storybook@latest init
 ```
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-24_10-56-32.png)
+![](.\assert\Snipaste_2025-01-24_10-56-32.png)
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-24_12-04-19.png)
+![](.\assert\Snipaste_2025-01-24_12-04-19.png)
 
 ## 引入图标库
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-24_20-58-52.png)
+![](.\assert\Snipaste_2025-01-24_20-58-52.png)
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-24_21-00-15.png)
+![](.\assert\Snipaste_2025-01-24_21-00-15.png)
 
 ## 编写Icon组件
 
@@ -712,7 +712,7 @@ npm run build-es
 
 生成打包后的文件：
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-25_14-50-50.png)
+![](.\assert\Snipaste_2025-01-25_14-50-50.png)
 
 安装vite插件使得其他用户使用打包后的包拥有**类型提示**：
 
@@ -724,7 +724,7 @@ npm run build-es
 
 2.修改**packages\core\vite.es.config.ts**
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-25_15-15-36.png)
+![](.\assert\Snipaste_2025-01-25_15-15-36.png)
 
 3.再次执行命令：
 
@@ -734,7 +734,7 @@ npm run build-es
 
 4.打包后的结构
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-25_15-17-54.png)
+![](.\assert\Snipaste_2025-01-25_15-17-54.png)
 
 又希望在dist文件夹下有一个type文件夹单独存放类型以及一个es和一个umd文件夹，而且现在生成的类型还是不符合预期。所以进行限制：
 
@@ -833,7 +833,7 @@ npm run build-es
 
 4.打包结构
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-25_15-28-56.png)
+![](.\assert\Snipaste_2025-01-25_15-28-56.png)
 
 以分包的形式打包
 
@@ -926,7 +926,7 @@ npm run build-es
 
 3.打包结构
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-25_16-02-50.png)
+![](.\assert\Snipaste_2025-01-25_16-02-50.png)
 
 随后需要将入口的样式文件`packages\core\dist\es\index.css`放到`packages\core\dist\index.css`
 
@@ -938,7 +938,7 @@ PS D:\Codes\前端学习\18-elemetplus-clone\hangUI> pnpm add move-file-cli@^3.0
 
 2.在**packages\core\package.json**添加命令
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-25_16-09-55.png)
+![](.\assert\Snipaste_2025-01-25_16-09-55.png)
 
 还需将npm script串联起来
 
@@ -950,11 +950,11 @@ pnpm add npm-run-all@^4.1.5 -Dw
 
 2.在**packages\core\package.json**添加命令
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-25_16-30-51.png)
+![](.\assert\Snipaste_2025-01-25_16-30-51.png)
 
 3.在package.json添加命令
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-25_16-27-38.png)
+![](.\assert\Snipaste_2025-01-25_16-27-38.png)
 
 4.在根目录执行build
 
@@ -964,7 +964,7 @@ PS D:\Codes\前端学习\18-elemetplus-clone\hangUI> npm run build
 
 5.打包后结构
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-25_16-32-05.png)
+![](.\assert\Snipaste_2025-01-25_16-32-05.png)
 
 最后调整依赖
 
@@ -1178,7 +1178,7 @@ export default defineConfig({
 
 **packages\core\index.ts**
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-25_17-38-15.png)
+![](.\assert\Snipaste_2025-01-25_17-38-15.png)
 
 ## npm发布
 
@@ -1196,11 +1196,11 @@ nrm use npm
 npm login
 ```
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-25_20-31-06.png)
+![](.\assert\Snipaste_2025-01-25_20-31-06.png)
 
 2.修改版本号**packages\core\package.json**
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-25_20-40-35.png)
+![](.\assert\Snipaste_2025-01-25_20-40-35.png)
 
 >  3.包名重复修改:注意！！！！！
 
@@ -1214,7 +1214,7 @@ npm login
 npm publish --access=public
 ```
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-25_21-19-58.png)
+![](.\assert\Snipaste_2025-01-25_21-19-58.png)
 
 ### 更优雅的打包
 
@@ -1228,7 +1228,7 @@ pnpm add rimraf -Dw
 
 `rimraf`用于每次打包前清理dist文件,避免上一次打包的缓存影响最新一次的打包.
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-25_21-33-45.png)
+![](.\assert\Snipaste_2025-01-25_21-33-45.png)
 
 2.在根目录执行命令安装
 
@@ -1238,7 +1238,7 @@ pnpm add release-it -Dw
 
 `release-it`用于发布时自动更新版本号
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-25_21-36-32.png)
+![](.\assert\Snipaste_2025-01-25_21-36-32.png)
 
 使用:
 
@@ -1256,15 +1256,15 @@ git push --set-upstream orgin main
 npm run release
 ```
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-25_21-48-11.png)
+![](.\assert\Snipaste_2025-01-25_21-48-11.png)
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-25_21-49-02.png)
+![](.\assert\Snipaste_2025-01-25_21-49-02.png)
 
 ## 编写Collapse组件
 
 ### 不使用v-modal版本
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-01-26_23-26-13.png)
+![](.\assert\Snipaste_2025-01-26_23-26-13.png)
 
 ## 打包优化
 
@@ -1272,40 +1272,40 @@ npm run release
 
 **packages\core\vite.es.config.ts**
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_17-04-32.png)
+![](.\assert\Snipaste_2025-02-16_17-04-32.png)
 
 ### 2.将组件相关的css放到theme文件夹下
 
 1）修改**packages\core\vite.es.config.ts**
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_17-26-57.png)
+![](.\assert\Snipaste_2025-02-16_17-26-57.png)
 
 2）修改**packages\core\package.json**
 
 > 这里删除了move-style的使用，后续会自己写一个插件实现该功能
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_17-25-43.png)
+![](.\assert\Snipaste_2025-02-16_17-25-43.png)
 
 3）pnpm build 结果
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_17-28-19.png)
+![](.\assert\Snipaste_2025-02-16_17-28-19.png)
 
 ### 3.压缩umd
 
 在core下执行命令：
 
 ```
-PS D:\Codes\前端学习\18-elemetplus-clone\hangUI\packages\core>
+PS .\packages\core>
 pnpm add vite-plugin-compression2 -D
 ```
 
 修改**packages\core\vite.umd.config.ts**
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_17-35-59.png)
+![](.\assert\Snipaste_2025-02-16_17-35-59.png)
 
 压缩结果
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_17-36-55.png)
+![](.\assert\Snipaste_2025-02-16_17-36-55.png)
 
 ### 4.编写vite插件
 
@@ -1314,7 +1314,7 @@ pnpm add vite-plugin-compression2 -D
 执行命令：
 
 ```
-PS D:\Codes\前端学习\18-elemetplus-clone\hangUI\packages\core>
+PS .\packages\core>
 pnpm add shelljs -wD
 pnpm add @types/shelljs -wD
 ```
@@ -1323,11 +1323,11 @@ pnpm add @types/shelljs -wD
 
 **package.json**
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_19-54-49.png)
+![](.\assert\Snipaste_2025-02-16_19-54-49.png)
 
 删除相关命令：
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_20-52-59.png)
+![](.\assert\Snipaste_2025-02-16_20-52-59.png)
 
 **packages\core\hooksPlugins.ts**
 
@@ -1523,22 +1523,22 @@ export default defineConfig({
 
 执行build的效果：
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_20-53-58.png)
+![](.\assert\Snipaste_2025-02-16_20-53-58.png)
 
 ### 5.解决在core/index中使用@形式的路径打包后找不到的问题
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_21-57-46.png)
+![](.\assert\Snipaste_2025-02-16_21-57-46.png)
 
 修改**tsconfig.build.json**
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_22-04-49.png)
+![](.\assert\Snipaste_2025-02-16_22-04-49.png)
 
 ### 6.代码混淆 和压缩等配置
 
 执行命令：
 
 ```
-PS D:\Codes\前端学习\18-elemetplus-clone\hangUI\packages\core>
+PS .\packages\core>
   pnpm add terser @rollup/plugin-terser -D
 ```
 
@@ -1809,23 +1809,23 @@ declare const TEST: boolean;
 
 3）修改**tsconfig.build.json**
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_23-11-18.png)
+![](.\assert\Snipaste_2025-02-16_23-11-18.png)
 
 4）修改**tsconfig.json**
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_23-11-43.png)
+![](.\assert\Snipaste_2025-02-16_23-11-43.png)
 
 5）修改**packages\core\package.json**
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_23-25-12.png)
+![](.\assert\Snipaste_2025-02-16_23-25-12.png)
 
 6）修改**package.json**
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_23-44-38.png)
+![](.\assert\Snipaste_2025-02-16_23-44-38.png)
 
 7）修改**packages\core\index.ts**
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_23-37-57.png)
+![](.\assert\Snipaste_2025-02-16_23-37-57.png)
 
 8）演示
 
@@ -1847,40 +1847,40 @@ PS D:\Codes\前端学习\18-elemetplus-clone\hangUI> pnpm dev
 
 运行`build:dev`和`build`：
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_23-36-27.png)
+![](.\assert\Snipaste_2025-02-16_23-36-27.png)
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_23-37-10.png)
+![](.\assert\Snipaste_2025-02-16_23-37-10.png)
 
 执行`pnpm dev`:
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_23-46-58.png)
+![](.\assert\Snipaste_2025-02-16_23-46-58.png)
 
 ### 7.展示按需引入的使用
 
 修改**packages\play\.storybook\preview.js**
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-16_23-52-07.png)
+![](.\assert\Snipaste_2025-02-16_23-52-07.png)
 
 修改**packages\play\src\stories\Button.stories.ts**和**packages\play\src\stories\Collapse.stories.ts**
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-17_00-03-31.png)
+![](.\assert\Snipaste_2025-02-17_00-03-31.png)
 
 结果：
 
 执行命令：
 
 ```
-PS D:\Codes\前端学习\18-elemetplus-clone\hangUI\packages\play> pnpm build-storybook
+PS .\packages\play> pnpm build-storybook
 http-server .\storybook-static
 ```
 
 > 在网络请求中没有请求其他组件的内容，在js文件中也将Icon组件集成到了Button组件相关的js中
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-17_00-14-11.png)
+![](.\assert\Snipaste_2025-02-17_00-14-11.png)
 
 ## 实现Alert组件
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-17_16-08-41.png)
+![](.\assert\Snipaste_2025-02-17_16-08-41.png)
 
 ## 使用vitepress搭建组件文档
 
@@ -1893,10 +1893,10 @@ PS D:\Codes\前端学习\18-elemetplus-clone\hangUI> pnpm add -wD vitepress
 ### 2）初始化
 
 ```
-PS D:\Codes\前端学习\18-elemetplus-clone\hangUI\packages\docs> pnpm vitepress init
+PS .\packages\docs> pnpm vitepress init
 ```
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-18_15-56-32.png)
+![](.\assert\Snipaste_2025-02-18_15-56-32.png)
 
 ### 3）运行
 
@@ -1908,12 +1908,12 @@ PS D:\Codes\前端学习\18-elemetplus-clone\hangUI\packages\docs> pnpm vitepres
 
 当前测试用例覆盖率：
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-17_20-34-24.png)
+![](.\assert\Snipaste_2025-02-17_20-34-24.png)
 
 提高后：
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-18_15-19-34.png)
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-18_15-19-49.png)
+![](.\assert\Snipaste_2025-02-18_15-19-34.png)
+![](.\assert\Snipaste_2025-02-18_15-19-49.png)
 
 ## 成功部署到github上
 
@@ -1922,7 +1922,7 @@ PS D:\Codes\前端学习\18-elemetplus-clone\hangUI\packages\docs> pnpm vitepres
 1. 项目仓库需要是public
 2. 检查workflow的yml的配置
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-18_16-16-40.png)
+![](.\assert\Snipaste_2025-02-18_16-16-40.png)
 
 ## 编写Tooltip组件
 
@@ -1934,21 +1934,21 @@ PS D:\Codes\前端学习\18-elemetplus-clone\hangUI\packages\docs> pnpm vitepres
 PS D:\Codes\前端学习\18-elemetplus-clone\hangUI> pnpm add @popperjs/core -wD
 ```
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-19_14-15-49.png)
+![](.\assert\Snipaste_2025-02-19_14-15-49.png)
 
 ## 对hooks目录下的文件进行测试
 
 > 作者将hooks单独打包了，我并没有做这一个操作,同时作者将hooksPlugin和重写vitepress的相关内容都放在lib文件夹下并打包了，我并没有这么做。
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-19_15-00-04.png)
+![](.\assert\Snipaste_2025-02-19_15-00-04.png)
 
 ## 编写Popconfirm组件
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-19_20-01-19.png)
+![](.\assert\Snipaste_2025-02-19_20-01-19.png)
 
 ## 编写Dropdown组件
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-23_09-25-19.png)
+![](.\assert\Snipaste_2025-02-23_09-25-19.png)
 
 ## 国际化
 
@@ -1960,11 +1960,11 @@ PS D:\Codes\前端学习\18-elemetplus-clone\hangUI> pnpm add vue3-i18n -Dw
 
 ### 2）新建locale文件夹并进行pnpm初始化
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-23_09-35-12.png)
+![](.\assert\Snipaste_2025-02-23_09-35-12.png)
 
 ### 3）修改根目录的package.json,随后执行`pnpm i`
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-23_09-36-28.png)
+![](.\assert\Snipaste_2025-02-23_09-36-28.png)
 
 ```
 PS D:\Codes\前端学习\18-elemetplus-clone\hangUI> pnpm i
@@ -1972,9 +1972,9 @@ PS D:\Codes\前端学习\18-elemetplus-clone\hangUI> pnpm i
 
 ### 4)模仿element-plus编写语言类型和配置内容，并在core中导出。
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-23_09-55-29.png)
+![](.\assert\Snipaste_2025-02-23_09-55-29.png)
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-23_16-01-00.png)
+![](.\assert\Snipaste_2025-02-23_16-01-00.png)
 
 ### 5）自定义的 `useLocale` 钩子函数
 
@@ -2026,7 +2026,7 @@ export default useLocale;
 
 ### 6）编写ConfigProvider组件
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-23_15-19-20.png)
+![](.\assert\Snipaste_2025-02-23_15-19-20.png)
 
 **packages\components\ConfigProvider\hooks.ts**
 
@@ -2222,21 +2222,21 @@ export function makeInstaller(components: Plugin[]) {
 
 **packages\core\index.ts**
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-23_16-15-43.png)
+![](.\assert\Snipaste_2025-02-23_16-15-43.png)
 
 **tsconfig.build.json**
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-23_16-14-52.png)
+![](.\assert\Snipaste_2025-02-23_16-14-52.png)
 
 ### 9)使用
 
 1.给组件库中的特定组件实现国际化，以Popconfirm组件为例：
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-23_15-55-45.png)
+![](.\assert\Snipaste_2025-02-23_15-55-45.png)
 
 2.使用该组件
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-23_16-18-25.png)
+![](.\assert\Snipaste_2025-02-23_16-18-25.png)
 
 **packages\play\src\App.vue**
 
@@ -2278,7 +2278,7 @@ const changelang = () => {
 
 ## 编写Message组件
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-24_13-21-09.png)
+![](.\assert\Snipaste_2025-02-24_13-21-09.png)
 
 **packages\play\src\App.vue**
 
@@ -2333,7 +2333,7 @@ const open5 = () => {
 
 ## 编写Notification组件
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-24_19-38-37.png)
+![](.\assert\Snipaste_2025-02-24_19-38-37.png)
 
 **packages\play\src\App.vue**
 
@@ -2396,7 +2396,7 @@ function openNotify3() {
 
 ## 实现Input组件（未实现表单相关操作版）
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-26_20-37-18.png)
+![](.\assert\Snipaste_2025-02-26_20-37-18.png)
 
 **packages\play\src\App.vue**
 
@@ -2425,7 +2425,7 @@ const form = reactive({
 
 ## 实现MessageBox组件（函数式调用！项目难点1）
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-27_20-22-58.png)
+![](.\assert\Snipaste_2025-02-27_20-22-58.png)
 
 **packages\play\src\App.vue**
 
@@ -2467,7 +2467,7 @@ function openConfirm() {
 
 ### 实现Loading组件的函数式调用
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-28_10-55-24.png)
+![](.\assert\Snipaste_2025-02-28_10-55-24.png)
 
 **packages\play\src\App.vue**
 
@@ -2504,7 +2504,7 @@ function openLoading1() {
 
 ### 实现Loading组件的指令式调用
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-28_12-29-51.png)
+![](.\assert\Snipaste_2025-02-28_12-29-51.png)
 
 **packages\play\src\App.vue**
 
@@ -2559,7 +2559,7 @@ function openLoading2() {
 
 ### 实现未兼容form组件的Switch组件
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-28_13-45-48.png)
+![](.\assert\Snipaste_2025-02-28_13-45-48.png)
 
 **packages\play\src\App.vue**
 
@@ -2589,7 +2589,7 @@ const switchBtn = ref(false);
 
 ### 实现未兼容form组件的Select组件
 
-![](D:\Codes\前端学习\18-elemetplus-clone\hangUI\assert\Snipaste_2025-02-28_22-01-19.png)
+![](.\assert\Snipaste_2025-02-28_22-01-19.png)
 
 ```vue
 <script setup lang="ts">
@@ -2618,6 +2618,110 @@ const optValue2 = ref("");
       <h-option value="shanghai" label="op2" disabled />
       <h-option value="guangzhou" label="op3" />
     </h-select>
+  </div>
+</template>
+
+
+```
+
+## 实现Form组件
+
+下载相关包：
+
+```
+PS D:\Codes\前端学习\18-elemetplus-clone\hangUI> pnpm add async-validator -wD
+```
+
+![](.\assert\Snipaste_2025-03-01_19-13-21.png)
+
+```vue
+<script setup lang="ts">
+import { computed, ref, h, reactive } from "vue";
+import type {
+  DropdownItemProps,
+  FormInstance,
+  FormItemInstance,
+} from "@purple-liu/hangui";
+import {
+  ja,
+  ko,
+  en,
+  zhCn,
+  zhTw,
+  HConfigProvider,
+  HMessage,
+  HNotification,
+  HMessageBox,
+  HLoading,
+} from "@purple-liu/hangui";
+const formRef = ref<FormInstance>();
+const formItemRef = ref<FormItemInstance>();
+const formData = reactive({
+  name: "",
+  region: "",
+  delivery: false,
+  desc: "",
+});
+
+const formOptions = ref([
+  { value: "beijing", label: "Zone One" },
+  { value: "shanghai", label: "Zone Two" },
+]);
+
+const rules = reactive({
+  name: [
+    { required: true, message: "请输入活动名称", trigger: "blur" },
+    { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" },
+  ],
+  region: [{ required: true, message: "请选择活动区域", trigger: "change" }],
+  desc: [{ required: true, message: "请填写活动形式", trigger: "blur" }],
+});
+
+const onSubmit = () => {
+  formRef.value?.validate().then((valid) => {
+    if (valid) {
+      HMessage.success("submit!");
+    }
+  });
+};
+
+const onReset = () => {
+  formRef.value?.resetFields();
+};
+const onResetFormItem = () => {
+  console.log(formData);
+  formItemRef.value?.resetField();
+};
+</script>
+
+<template>
+  <!-- 使用自己的表单控件 -->
+
+  <div>
+    <h1>Form</h1>
+    <h-form ref="formRef" :model="formData" :rules="rules">
+      <h-form-item label="Activity name" prop="name">
+        <h-input v-model="formData.name" />
+      </h-form-item>
+      <h-form-item label="Activity zone" prop="region" ref="formItemRef">
+        <h-select
+          v-model="formData.region"
+          placeholder="please select your zone"
+          :options="formOptions"
+        />
+      </h-form-item>
+      <h-form-item label="Instant delivery" prop="delivery">
+        <h-switch v-model="formData.delivery" />
+      </h-form-item>
+      <h-form-item label="Activity form" prop="desc">
+        <h-input v-model="formData.desc" type="textarea" />
+      </h-form-item>
+      <h-form-item>
+        <h-button type="primary" @click="onSubmit">Create</h-button>
+        <h-button @click="onReset">Reset</h-button>
+        <h-button @click="onResetFormItem">ResetSelect</h-button>
+      </h-form-item>
+    </h-form>
   </div>
 </template>
 

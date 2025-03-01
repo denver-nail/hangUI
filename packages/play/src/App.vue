@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { computed, ref, h, reactive } from "vue";
-import type { DropdownItemProps } from "@purple-liu/hangui";
+import type {
+  DropdownItemProps,
+  FormInstance,
+  FormItemInstance,
+} from "@purple-liu/hangui";
 import {
   ja,
   ko,
@@ -144,6 +148,45 @@ const options = ref([
 ]);
 const optValue1 = ref("");
 const optValue2 = ref("");
+
+const formRef = ref<FormInstance>();
+const formItemRef = ref<FormItemInstance>();
+const formData = reactive({
+  name: "",
+  region: "",
+  delivery: false,
+  desc: "",
+});
+
+const formOptions = ref([
+  { value: "beijing", label: "Zone One" },
+  { value: "shanghai", label: "Zone Two" },
+]);
+
+const rules = reactive({
+  name: [
+    { required: true, message: "请输入活动名称", trigger: "blur" },
+    { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" },
+  ],
+  region: [{ required: true, message: "请选择活动区域", trigger: "change" }],
+  desc: [{ required: true, message: "请填写活动形式", trigger: "blur" }],
+});
+
+const onSubmit = () => {
+  formRef.value?.validate().then((valid) => {
+    if (valid) {
+      HMessage.success("submit!");
+    }
+  });
+};
+
+const onReset = () => {
+  formRef.value?.resetFields();
+};
+const onResetFormItem = () => {
+  console.log(formData);
+  formItemRef.value?.resetField();
+};
 </script>
 
 <template>
@@ -293,6 +336,35 @@ const optValue2 = ref("");
       <h-option value="shanghai" label="op2" disabled />
       <h-option value="guangzhou" label="op3" />
     </h-select>
+  </div>
+  <hr />
+  <!-- 使用自己的表单控件 -->
+
+  <div>
+    <h1>Form</h1>
+    <h-form ref="formRef" :model="formData" :rules="rules">
+      <h-form-item label="Activity name" prop="name">
+        <h-input v-model="formData.name" />
+      </h-form-item>
+      <h-form-item label="Activity zone" prop="region" ref="formItemRef">
+        <h-select
+          v-model="formData.region"
+          placeholder="please select your zone"
+          :options="formOptions"
+        />
+      </h-form-item>
+      <h-form-item label="Instant delivery" prop="delivery">
+        <h-switch v-model="formData.delivery" />
+      </h-form-item>
+      <h-form-item label="Activity form" prop="desc">
+        <h-input v-model="formData.desc" type="textarea" />
+      </h-form-item>
+      <h-form-item>
+        <h-button type="primary" @click="onSubmit">Create</h-button>
+        <h-button @click="onReset">Reset</h-button>
+        <h-button @click="onResetFormItem">ResetSelect</h-button>
+      </h-form-item>
+    </h-form>
   </div>
 </template>
 

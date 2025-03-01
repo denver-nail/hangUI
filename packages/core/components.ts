@@ -18,6 +18,8 @@ import {
   HSwitch,
   HSelect,
   HOption,
+  HForm,
+  HFormItem,
 } from "@hangui/components";
 import type { Plugin } from "vue";
 //将所有组件作为vue插件暴露给外部
@@ -40,4 +42,6 @@ export default [
   HSwitch,
   HSelect,
   HOption,
+  HForm,
+  HFormItem,
 ] as Plugin[];
